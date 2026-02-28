@@ -11,15 +11,12 @@
   <style>
     :root{
       --bg:#0b1d2b;
-      --panel:#0e2233;
       --text:#ffffff;
       --muted:#8b9db0;
       --brand:#e2e8f0;
       --brand2:#94a3b8;
-      --accent:#cbd5e1;
       --line:rgba(255,255,255,.10);
       --radius:16px;
-      --shadow: 0 12px 40px rgba(0,0,0,.5);
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -35,515 +32,248 @@
       line-height: 1.7;
     }
 
-    /* Animated grid background */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background-image:
         linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
       background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
 
-    body::after {
-      content: '';
-      position: fixed;
-      top: -40%;
-      left: -10%;
-      width: 70%;
-      height: 70%;
-      background: radial-gradient(ellipse, rgba(255,255,255,.05) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-    a{ color: var(--brand); text-decoration: none; }
-    a:hover{ text-decoration: underline; }
-
-    /* ─── HEADER ─── */
+    /* HEADER */
     header{
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: sticky; top: 0; z-index: 100;
       background: rgba(11,29,43,.96);
       border-bottom: 1px solid var(--line);
       backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
     }
 
     .header-inner{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      height: 64px;
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 20px; display: flex;
+      align-items: center; gap: 20px; height: 64px;
     }
 
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Space Mono', monospace;
-      font-weight: 700;
-      font-size: 15px;
-      letter-spacing: -.3px;
-      white-space: nowrap;
-      color: var(--text);
-      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Space Mono', monospace; font-weight: 700;
+      font-size: 15px; white-space: nowrap;
+      color: var(--text); text-decoration: none;
     }
 
     .logo-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
+      width: 10px; height: 10px; border-radius: 50%;
       background: var(--brand);
-      box-shadow: 0 0 16px rgba(255,255,255,.5), 0 0 32px rgba(255,255,255,.2);
+      box-shadow: 0 0 16px rgba(255,255,255,.5);
       animation: pulse 2.5s ease-in-out infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 10px var(--brand), 0 0 20px rgba(255,255,255,.25); }
-      50% { box-shadow: 0 0 20px var(--brand), 0 0 50px rgba(255,255,255,.3); }
+      0%,100% { box-shadow: 0 0 10px var(--brand), 0 0 20px rgba(255,255,255,.2); }
+      50%      { box-shadow: 0 0 20px var(--brand), 0 0 40px rgba(255,255,255,.3); }
     }
 
-    /* ─── TAB NAV ─── */
-    .tab-nav {
-      display: flex;
-      gap: 4px;
-      margin-left: auto;
-    }
+    .tab-nav { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
 
     .tab-btn {
-      padding: 8px 16px;
-      border: 1px solid transparent;
-      border-radius: 10px;
-      background: none;
-      color: var(--muted);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all .2s ease;
-      white-space: nowrap;
+      padding: 8px 16px; border: 1px solid transparent;
+      border-radius: 10px; background: none;
+      color: var(--muted); font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: all .2s ease; white-space: nowrap;
     }
 
-    .tab-btn:hover {
-      color: var(--text);
-      background: rgba(255,255,255,.05);
-      border-color: var(--line);
-    }
+    .tab-btn:hover { color: var(--text); background: rgba(255,255,255,.05); border-color: var(--line); }
+    .tab-btn.active { color: var(--brand); background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.25); }
 
-    .tab-btn.active {
-      color: var(--brand);
-      background: rgba(255,255,255,.07);
-      border-color: rgba(255,255,255,.25);
-    }
-
-    /* ─── MAIN LAYOUT ─── */
-    .wrap{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 20px;
-      position: relative;
-      z-index: 1;
-    }
-
+    /* LAYOUT */
+    .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
     main { padding: 32px 0 60px; }
-
-    /* ─── TAB PANELS ─── */
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* ─── HOME PAGE ─── */
+    /* HERO */
     .hero{
-      background: linear-gradient(135deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,.03) 50%, rgba(255,255,255,.03) 100%);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 20px;
-      padding: 48px 36px;
-      margin-top: 24px;
-      position: relative;
-      overflow: hidden;
+      background: linear-gradient(135deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,.02) 100%);
+      border: 1px solid rgba(255,255,255,.10); border-radius: 20px;
+      padding: 48px 36px; margin-top: 24px; position: relative; overflow: hidden;
     }
 
     .hero::before {
-      content: 'CLOUD\ANETWORK';
-      white-space: pre;
-      position: absolute;
-      right: -20px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-family: 'Space Mono', monospace;
-      font-size: 120px;
-      font-weight: 700;
-      line-height: 1;
-      color: rgba(255,255,255,.03);
-      pointer-events: none;
-      letter-spacing: -6px;
+      content: 'CLOUD\ANETWORK'; white-space: pre;
+      position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+      font-family: 'Space Mono', monospace; font-size: 120px; font-weight: 700;
+      line-height: 1; color: rgba(255,255,255,.03); pointer-events: none; letter-spacing: -6px;
     }
 
-    .hero h1{
-      margin: 0 0 14px;
-      font-size: 42px;
-      line-height: 1.1;
-      color: #ffffff;
-      font-weight: 900;
-      max-width: 700px;
-    }
-
-    .hero p{
-      margin: 0 0 24px;
-      color: var(--muted);
-      max-width: 620px;
-      font-size: 16px;
-    }
-
-    .cta-row{
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+    .hero h1{ margin: 0 0 14px; font-size: 42px; line-height: 1.1; color: #fff; font-weight: 900; max-width: 700px; }
+    .hero p{ margin: 0 0 24px; color: var(--muted); max-width: 620px; font-size: 16px; }
+    .cta-row{ display: flex; gap: 12px; flex-wrap: wrap; }
 
     .cta-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 20px;
-      background: var(--brand);
-      color: #0b1d2b;
-      font-weight: 900;
-      font-size: 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      border: none;
-      font-family: 'DM Sans', sans-serif;
-      transition: all .2s ease;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 20px; background: var(--brand); color: #0b1d2b;
+      font-weight: 900; font-size: 14px; border-radius: 12px;
+      cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: all .2s;
     }
-
-    .cta-primary:hover {
-      filter: brightness(1.1);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(255,255,255,.25);
-      text-decoration: none;
-      color: #0b1d2b;
-    }
+    .cta-primary:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,.2); text-decoration: none; color: #0b1d2b; }
 
     .cta-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 20px;
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      font-weight: 700;
-      font-size: 14px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: all .2s ease;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 20px; background: rgba(255,255,255,.04); color: var(--text);
+      font-weight: 700; font-size: 14px; border-radius: 12px;
+      border: 1px solid var(--line); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s;
     }
+    .cta-secondary:hover { background: rgba(255,255,255,.08); transform: translateY(-2px); text-decoration: none; color: var(--text); }
 
-    .cta-secondary:hover {
-      background: rgba(255,255,255,.08);
-      border-color: rgba(255,255,255,.2);
-      transform: translateY(-2px);
-      text-decoration: none;
-      color: var(--text);
-    }
+    .pill-row{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .pill{ border: 1px solid var(--line); background: rgba(255,255,255,.03); border-radius: 999px; padding: 5px 12px; color: var(--muted); font-weight: 700; font-size: 12px; font-family: 'Space Mono', monospace; }
 
-    .pill-row{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 20px;
-    }
-
-    .pill{
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      border-radius: 999px;
-      padding: 5px 12px;
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 12px;
-      font-family: 'Space Mono', monospace;
-    }
-
-    .card{
-      background: rgba(255,255,255,.02);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 24px;
-      margin-top: 16px;
-      transition: border-color .2s;
-    }
-
-    .card:hover { border-color: rgba(255,255,255,.10); }
-
-    .card h2{
-      margin: 0 0 12px;
-      color: #ffffff;
-      font-size: 20px;
-      font-weight: 800;
-    }
-
-    .card h3 {
-      color: #ffffff;
-      margin: 16px 0 8px;
-      font-size: 16px;
-    }
-
+    /* CARDS */
+    .card{ background: rgba(255,255,255,.02); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin-top: 16px; transition: border-color .2s; }
+    .card:hover { border-color: rgba(255,255,255,.18); }
+    .card h2{ margin: 0 0 12px; color: #fff; font-size: 20px; font-weight: 800; }
+    .card h3{ color: #fff; margin: 16px 0 8px; font-size: 16px; }
     .muted{ color: var(--muted); }
-
     ul{ padding-left: 20px; margin: 8px 0; }
     li{ margin: 8px 0; color: var(--muted); }
     li strong{ color: var(--text); }
 
-    /* Clickable topic cards */
-    .topic-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 14px;
-      margin-top: 16px;
+    /* TOPIC GRID */
+    .topic-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 14px; margin-top: 16px; }
+    .topic-card{ border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; background: rgba(255,255,255,.02); cursor: pointer; transition: all .2s; }
+    .topic-card:hover{ border-color: rgba(255,255,255,.25); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.4); }
+    .topic-card .icon{ font-size: 28px; margin-bottom: 10px; display: block; }
+    .topic-card h3{ margin: 0 0 6px; font-size: 16px; font-weight: 800; color: var(--text); }
+    .topic-card p{ margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .topic-card .arrow{ margin-top: 14px; font-size: 12px; color: var(--brand); font-weight: 700; font-family: 'Space Mono', monospace; }
+
+    /* PAGE HERO */
+    .page-hero{ border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; margin-top: 24px; background: linear-gradient(135deg, rgba(255,255,255,.05), transparent); }
+    .reading-time{ font-family: 'Space Mono', monospace; font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+    code{ background: rgba(255,255,255,.06); padding: 3px 8px; border-radius: 6px; color: var(--brand); font-family: 'Space Mono', monospace; font-size: 13px; }
+
+    /* TWO COL */
+    .two-col{ display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+    @media(min-width:800px){ .two-col{ grid-template-columns: 1fr 1fr; } }
+
+    .tool-list{ list-style: none; padding: 0; margin-top: 12px; }
+    .tool-list li{ display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; color: var(--muted); }
+    .tool{ min-width: 110px; text-align: center; padding: 5px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.05); color: var(--brand); font-weight: 700; font-family: 'Space Mono', monospace; font-size: 12px; flex-shrink: 0; }
+    .callout{ margin-top: 12px; padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.04); color: var(--muted); font-size: 13px; }
+
+    .stat-row{ display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; justify-content: center; }
+    .stat-box{ border: 1px solid rgba(255,255,255,.10); border-radius: 14px; padding: 14px 20px; min-width: 140px; background: rgba(255,255,255,.04); text-align: center; }
+    .stat-box b{ display: block; font-size: 18px; font-family: 'Space Mono', monospace; color: var(--brand); margin-bottom: 4px; }
+    .stat-box span{ font-size: 12px; color: var(--muted); }
+
+    /* FIREWALL SUMMARY CARDS */
+    .summary-row{ display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 20px 0 32px; }
+    @media(max-width:640px){ .summary-row{ grid-template-columns: 1fr; } }
+
+    .summary-card{ border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; background: rgba(255,255,255,.02); position: relative; overflow: hidden; transition: border-color .2s, transform .2s; }
+    .summary-card:hover{ border-color: rgba(255,255,255,.2); transform: translateY(-2px); }
+    .summary-card::before{ content:''; position: absolute; top:0; left:0; right:0; height: 2px; }
+    .summary-card.flow::before{ background: linear-gradient(90deg,#60a5fa,#3b82f6); }
+    .summary-card.conn::before{ background: linear-gradient(90deg,#a78bfa,#8b5cf6); }
+    .summary-card.sess::before{ background: linear-gradient(90deg,#34d399,#10b981); }
+    .summary-card .num{ font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:8px; }
+    .summary-card h3{ font-size:17px; font-weight:900; margin:0 0 8px; }
+    .summary-card.flow h3{ color:#93c5fd; }
+    .summary-card.conn h3{ color:#c4b5fd; }
+    .summary-card.sess h3{ color:#6ee7b7; }
+    .summary-card p{ font-size:13px; color:var(--muted); margin:0; line-height:1.55; }
+
+    /* FW SECTIONS */
+    .fw-section{ margin-bottom: 28px; }
+    .fw-section-header{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+    .fw-num{ width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-family:'Space Mono',monospace; font-size:13px; font-weight:700; flex-shrink:0; }
+    .fw-section.flow .fw-num{ background:rgba(59,130,246,.15); color:#93c5fd; border:1px solid rgba(59,130,246,.25); }
+    .fw-section.conn .fw-num{ background:rgba(139,92,246,.15); color:#c4b5fd; border:1px solid rgba(139,92,246,.25); }
+    .fw-section.sess .fw-num{ background:rgba(16,185,129,.15); color:#6ee7b7; border:1px solid rgba(16,185,129,.25); }
+    .fw-section-header h2{ font-size:22px; font-weight:900; margin:0; }
+    .fw-section.flow .fw-section-header h2{ color:#93c5fd; }
+    .fw-section.conn .fw-section-header h2{ color:#c4b5fd; }
+    .fw-section.sess .fw-section-header h2{ color:#6ee7b7; }
+
+    .fw-body{ border:1px solid var(--line); border-radius:var(--radius); background:rgba(255,255,255,.02); overflow:hidden; }
+    .fw-intro{ padding:18px 22px; border-bottom:1px solid var(--line); color:var(--muted); font-size:14px; line-height:1.7; }
+    .fw-intro strong{ color:var(--text); }
+
+    .tuple-row{ padding:16px 22px; display:flex; flex-wrap:wrap; gap:8px; border-bottom:1px solid var(--line); }
+    .tuple-label{ font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:8px; width:100%; text-transform:uppercase; letter-spacing:.06em; }
+    .tuple-pill{ display:flex; align-items:center; gap:6px; padding:7px 12px; border-radius:9px; border:1px solid rgba(59,130,246,.2); background:rgba(59,130,246,.07); font-size:12px; font-weight:700; color:#93c5fd; font-family:'Space Mono',monospace; }
+
+    .fw-chars{ padding:16px 22px; border-bottom:1px solid var(--line); }
+    .fw-chars-title{ font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:.06em; }
+    .char-list{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:7px; }
+    .char-list li{ display:flex; align-items:flex-start; gap:10px; font-size:13px; color:var(--muted); }
+    .char-list li::before{ content:'→'; font-family:'Space Mono',monospace; font-size:11px; margin-top:3px; flex-shrink:0; }
+    .fw-section.flow .char-list li::before{ color:#93c5fd; }
+    .fw-section.conn .char-list li::before{ color:#c4b5fd; }
+    .fw-section.sess .char-list li::before{ color:#6ee7b7; }
+    .char-list li strong{ color:var(--text); }
+
+    .stores-grid{ padding:16px 22px; display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; border-bottom:1px solid var(--line); }
+    .store-item{ padding:8px 12px; border:1px solid rgba(16,185,129,.15); border-radius:9px; background:rgba(16,185,129,.05); font-size:12px; color:#6ee7b7; font-family:'Space Mono',monospace; }
+
+    .fw-badges{ padding:12px 22px; display:flex; gap:8px; flex-wrap:wrap; }
+    .fw-badge{ padding:4px 10px; border-radius:7px; font-size:11px; font-weight:700; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); color:var(--muted); font-family:'Space Mono',monospace; }
+
+    .think-box{ padding:14px 22px; display:flex; align-items:center; gap:10px; }
+    .think-box p{ margin:0; font-size:13px; font-style:italic; color:var(--muted); }
+    .think-box p strong{ color:var(--text); font-style:normal; }
+
+    /* RELATE */
+    .relate-box{ border:1px solid var(--line); border-radius:var(--radius); background:rgba(255,255,255,.02); overflow:hidden; margin-top:16px; }
+    .relate-header{ padding:14px 22px; border-bottom:1px solid var(--line); font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+    .relate-diagram{ padding:24px 22px; display:flex; flex-direction:column; gap:12px; }
+    .relate-row{ display:flex; align-items:center; gap:14px; }
+    .relate-label{ font-family:'Space Mono',monospace; font-size:11px; font-weight:700; width:80px; flex-shrink:0; text-align:right; }
+    .relate-bar{ flex:1; height:34px; border-radius:8px; display:flex; align-items:center; padding:0 12px; font-size:12px; font-weight:700; }
+    .relate-row.flows .relate-label{ color:#93c5fd; }
+    .relate-row.flows .relate-bar{ background:rgba(59,130,246,.1); border:1px solid rgba(59,130,246,.2); color:#93c5fd; }
+    .relate-row.conn  .relate-label{ color:#c4b5fd; }
+    .relate-row.conn  .relate-bar{ background:rgba(139,92,246,.1); border:1px solid rgba(139,92,246,.2); color:#c4b5fd; max-width:70%; }
+    .relate-row.sess  .relate-label{ color:#6ee7b7; }
+    .relate-row.sess  .relate-bar{ background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.2); color:#6ee7b7; max-width:40%; }
+    .count-badge{ margin-left:auto; font-family:'Space Mono',monospace; font-size:11px; background:rgba(255,255,255,.06); padding:2px 7px; border-radius:5px; }
+    .relate-note{ padding:14px 22px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); }
+
+    /* BLOG */
+    .blog-card{ display:block; background:rgba(255,255,255,.02); border:1px solid var(--line); border-radius:var(--radius); padding:24px; margin-top:16px; transition:all .2s; cursor:pointer; }
+    .blog-card:hover{ border-color:rgba(255,255,255,.25); transform:translateY(-2px); box-shadow:0 10px 28px rgba(0,0,0,.35); text-decoration:none; }
+    .blog-card .meta{ font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:8px; }
+    .blog-card h2{ margin:0 0 10px; color:#fff; font-size:20px; font-weight:800; }
+    .blog-card p{ color:var(--muted); margin:0 0 14px; font-size:14px; }
+    .blog-card .read-more{ font-size:13px; color:var(--brand); font-weight:700; font-family:'Space Mono',monospace; }
+
+    /* CONNECT */
+    .connect-links{ list-style:none; padding:0; }
+    .connect-links li{ margin:8px 0; }
+    .connect-links a{ color:var(--brand); }
+
+    /* FOOTER */
+    footer{ margin-top:40px; padding:20px 0; border-top:1px solid var(--line); color:var(--muted); font-size:13px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; position:relative; z-index:1; }
+    .footer-links{ display:flex; gap:16px; }
+    .footer-links a{ color:var(--muted); font-size:13px; }
+    .footer-links a:hover{ color:var(--brand); text-decoration:none; }
+
+    @media(max-width:680px){
+      .hero h1{ font-size:26px; }
+      .hero{ padding:28px 20px; }
+      .tab-btn{ padding:6px 10px; font-size:12px; }
+      .logo span{ display:none; }
     }
 
-    .topic-card {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 20px;
-      background: rgba(255,255,255,.02);
-      cursor: pointer;
-      transition: all .2s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .topic-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity .2s;
-      border-radius: inherit;
-    }
-
-    .topic-card.cloud networking ::before { background: radial-gradient(ellipse at top left, rgba(255,255,255,.07), transparent 70%); }
-    .topic-card.ddos::before { background: radial-gradient(ellipse at top left, rgba(255,255,255,.06), transparent 70%); }
-
-    .topic-card:hover {
-      border-color: rgba(255,255,255,.25);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(0,0,0,.4);
-    }
-
-    .topic-card:hover::before { opacity: 1; }
-
-    .topic-card .icon {
-      font-size: 28px;
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    .topic-card h3 {
-      margin: 0 0 6px;
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .topic-card p {
-      margin: 0;
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .topic-card .arrow {
-      margin-top: 14px;
-      font-size: 12px;
-      color: var(--brand);
-      font-weight: 700;
-      font-family: 'Space Mono', monospace;
-    }
-
-    /* Stats row */
-    .stats-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 16px;
-    }
-
-    .stat {
-      flex: 1;
-      min-width: 120px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 16px;
-      background: rgba(255,255,255,.02);
-      text-align: center;
-    }
-
-    .stat b {
-      display: block;
-      font-size: 22px;
-      font-family: 'Space Mono', monospace;
-      color: var(--brand);
-      margin-bottom: 4px;
-    }
-
-    .stat span { font-size: 12px; color: var(--muted); }
-
-    /* ─── PACKET JOURNEY PAGE ─── */
-    .page-hero {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 32px;
-      margin-top: 24px;
-      background: linear-gradient(135deg, rgba(255,255,255,.05), transparent);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .page-hero .reading-time {
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 8px;
-    }
-
-    code{
-      background: rgba(255,255,255,.06);
-      padding: 3px 8px;
-      border-radius: 6px;
-      color: var(--brand);
-      font-family: 'Space Mono', monospace;
-      font-size: 13px;
-    }
-
-    /* ─── DDOS PAGE ─── */
-    .ddos-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    @media(min-width: 800px){
-      .ddos-grid { grid-template-columns: 1fr 1fr; }
-    }
-
-    .tool-list {
-      list-style: none;
-      padding: 0;
-      margin-top: 12px;
-    }
-
-    .tool-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 10px;
-      color: var(--muted);
-    }
-
-    .tool {
-      min-width: 110px;
-      text-align: center;
-      padding: 5px 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,.15);
-      background: rgba(255,255,255,.05);
-      color: var(--brand);
-      font-weight: 700;
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-    }
-
-    .callout {
-      margin-top: 12px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .ddos-stat-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-      justify-content: center;
-    }
-
-    .ddos-stat {
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      padding: 14px 20px;
-      min-width: 140px;
-      background: rgba(255,255,255,.04);
-      text-align: center;
-    }
-
-    .ddos-stat b {
-      display: block;
-      font-size: 20px;
-      font-family: 'Space Mono', monospace;
-      color: var(--brand);
-      margin-bottom: 4px;
-    }
-
-    .ddos-stat span { font-size: 12px; color: var(--muted); }
-
-    /* ─── ABOUT ─── */
-    .connect-links { list-style: none; padding: 0; }
-    .connect-links li { margin: 8px 0; }
-    .connect-links a { color: var(--brand); }
-
-    /* ─── FOOTER ─── */
-    footer{
-      margin-top: 40px;
-      padding: 20px 0;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 13px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .footer-links { display: flex; gap: 16px; }
-    .footer-links a { color: var(--muted); font-size: 13px; }
-    .footer-links a:hover { color: var(--brand); text-decoration: none; }
-
-    /* ─── RESPONSIVE ─── */
-    @media(max-width: 680px){
-      .hero h1 { font-size: 28px; }
-      .hero { padding: 28px 20px; }
-      .header-inner { gap: 12px; }
-      .tab-btn { padding: 6px 10px; font-size: 13px; }
-      .logo span { display: none; }
-    }
-
-    /* ─── ANIMATIONS ─── */
-    .fade-in {
-      animation: fadeIn .4s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .fade-in{ animation:fadeIn .4s ease forwards; }
+    @keyframes fadeIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
   </style>
 </head>
 
@@ -556,10 +286,10 @@
       <span>cloudnetworking.ai</span>
     </a>
     <nav class="tab-nav">
-      <button class="tab-btn active" onclick="showTab('home')" id="tab-home">Home</button>
-      <button class="tab-btn" onclick="showTab('cloud networking')" id="tab-cloud networking">📦 Cloud Networkingy</button>
-      <button class="tab-btn" onclick="showTab('ddos')" id="tab-ddos">🛡️ Cloud Security</button>
-      <button class="tab-btn" onclick="showTab('blog')" id="tab-blog">📝 Blog</button>
+      <button class="tab-btn active" onclick="showTab('home')"       id="tab-home">Home</button>
+      <button class="tab-btn"        onclick="showTab('networking')" id="tab-networking">🌐 Cloud Networking</button>
+      <button class="tab-btn"        onclick="showTab('security')"   id="tab-security">🛡️ Cloud Security</button>
+      <button class="tab-btn"        onclick="showTab('blog')"       id="tab-blog">📝 Blog</button>
     </nav>
   </div>
 </header>
@@ -567,23 +297,19 @@
 <div class="wrap">
 <main>
 
-  <!-- ═══════════════ HOME TAB ═══════════════ -->
+  <!-- ═══ HOME ═══ -->
   <div class="tab-panel active" id="panel-home">
 
     <section class="hero">
       <h1>Cloud Networking &amp; Security Made Clear</h1>
-      <p>
-        Beginner-friendly explanations, diagrams, and step-by-step notes on networking,
-        cloud architecture, traffic flow, and security fundamentals — focused on clarity,
-        not vendor marketing.
-      </p>
+      <p>Beginner-friendly explanations on networking, cloud architecture, traffic flow, and security fundamentals — focused on clarity, not vendor marketing.</p>
       <div class="cta-row">
-        <button class="cta-primary" onclick="showTab('Cloud Networking')">🚀 Cloud Networking</button>
-        <button class="cta-secondary" onclick="showTab('Cloud Security')">🛡️ Cloud Security Basics</button>
+        <button class="cta-primary"   onclick="showTab('networking')">🌐 Cloud Networking</button>
+        <button class="cta-secondary" onclick="showTab('security')">🛡️ Cloud Security</button>
+        <button class="cta-secondary" onclick="showTab('blog')">📝 Blog</button>
       </div>
       <div class="pill-row">
         <span class="pill">Beginner-friendly</span>
-        <span class="pill">Diagrams first</span>
         <span class="pill">No jargon</span>
         <span class="pill">Concepts before tools</span>
       </div>
@@ -591,26 +317,29 @@
 
     <section class="card">
       <h2>Our Mission</h2>
-      <p class="muted">
-        Free, foundational education in cloud networking and security — for anyone, anywhere. 
-        We believe clarity makes learning accessible to everyone.
-      </p>
+      <p class="muted">Free, foundational education in cloud networking and security — for anyone, anywhere. Clarity makes learning accessible to everyone.</p>
     </section>
 
     <section class="card">
       <h2>Explore Topics</h2>
       <div class="topic-grid">
-        <div class="topic-card cloud networking" onclick="showTab('cloud networking')">
-          <span class="icon">📦</span>
-          <h3>Cloud Network</h3>
-          <p>From 0s and 1s to the cloud — follow data across every layer of the network stack.</p>
-          <div class="arrow">Read article →</div>
+        <div class="topic-card" onclick="showTab('networking')">
+          <span class="icon">🌐</span>
+          <h3>Cloud Networking</h3>
+          <p>Flow, Connection, Session — firewall fundamentals explained clearly.</p>
+          <div class="arrow">Explore →</div>
         </div>
-        <div class="topic-card cloud security" onclick="showTab('cloud security')">
+        <div class="topic-card" onclick="showTab('security')">
           <span class="icon">🛡️</span>
           <h3>Cloud Security</h3>
-          <p>Understand attack types and how to defend against security threats.</p>
-          <div class="arrow">Read article →</div>
+          <p>DDoS attack types and how modern networks defend against them.</p>
+          <div class="arrow">Explore →</div>
+        </div>
+        <div class="topic-card" onclick="showTab('blog')">
+          <span class="icon">📝</span>
+          <h3>Blog</h3>
+          <p>Deep-dives including A Packet Journey — from bits to the cloud.</p>
+          <div class="arrow">Read posts →</div>
         </div>
       </div>
     </section>
@@ -618,926 +347,289 @@
     <section class="card">
       <h2>What You Will Learn</h2>
       <ul>
-        <li><strong>Networking fundamentals</strong> — OSI, TCP/IP, routing</li>
-        <li><strong>Traffic flow</strong> — DNS, ICMP, TCP handshakes</li>
-        <li><strong>Cloud architecture</strong> — data centers, virtualization</li>
-        <li><strong>Security basics</strong> — firewalls, IDS/IPS, TLS</li>
-        <li><strong>DDoS </strong> — attack types and mitigation</li>
+        <li><strong>Cloud Networking </strong> — routing</li>
+        <li><strong>Cloud Traffic flow</strong> — DNS, TCP, Flow, Connection, Session</li>
+        <li><strong>Cloud Architecture</strong> — data centers, virtualization</li>
+        <li><strong>Cloud Security </strong> — firewalls, IDS/IPS, TLS, DDoS</li>
       </ul>
     </section>
 
     <section class="card" id="about">
       <h2>About Me</h2>
-      <p class="muted">
-        I bring <strong>over two decades of experience in networking and security</strong>, and I continue to expand and share my knowledge through research and blogging, with a strong focus on clarity and practical understanding.
-      </p>
+      <p class="muted">I bring <strong>over two decades of experience in networking and security</strong>, and I continue to share my knowledge through research and blogging, with a strong focus on clarity and practical understanding.</p>
       <ul>
         <li><strong>Network Architecture</strong> — Private and Public cloud environments for enterprise customers</li>
         <li><strong>Cloud Infrastructure Design</strong> — AWS, Azure, and Oracle Cloud Infrastructure (OCI)</li>
-        <li><strong>Network Automation &amp; IaC</strong> — Terraform Basics, K8 Cilium</li>
+        <li><strong>Network Automation &amp; IaC</strong> — Terraform, K8s Cilium</li>
       </ul>
-      <p class="muted">
-        I currently lead Cloud Network &amp; Security for a large bank, managing a large-scale multi-cloud environment. Before this, I spent 16 years with GBM, IBM's representative office in the Middle East.
-      </p>
-      <p class="muted">
-        I strongly believe that <strong>anyone with curiosity, consistency, and a willingness to learn can reach meaningful levels in their career</strong>. The journey matters more than speed, and clarity makes learning accessible to everyone.
-      </p>
+      <p class="muted">I currently lead Cloud Network &amp; Security for a large bank, managing a large-scale multi-cloud environment. Before this, I spent 16 years with GBM, IBM's representative office in the Middle East.</p>
+      <p class="muted">I strongly believe that <strong>anyone with curiosity, consistency, and a willingness to learn can reach meaningful levels in their career</strong>.</p>
       <h3>Connect</h3>
       <ul class="connect-links">
-        <li>🔗 LinkedIn: <a href="https://www.linkedin.com/in/nithinvenugopal/" target="_blank" rel="noopener">linkedin.com/in/nithinvenugopal</a></li>
-        <li>🌐 Blog: <a href="https://cloudnetworking.ai" target="_blank" rel="noopener">cloudnetworking.ai</a></li>
-        <li>💻 GitHub: <a href="https://github.com/nithinvenugopal2020" target="_blank" rel="noopener">github.com/nithinvenugopal2020</a></li>
+        <li>🔗 <a href="https://www.linkedin.com/in/nithinvenugopal/" target="_blank" rel="noopener">linkedin.com/in/nithinvenugopal</a></li>
+        <li>🌐 <a href="https://cloudnetworking.ai" target="_blank" rel="noopener">cloudnetworking.ai</a></li>
+        <li>💻 <a href="https://github.com/nithinvenugopal2020" target="_blank" rel="noopener">github.com/nithinvenugopal2020</a></li>
       </ul>
     </section>
 
   </div>
 
-  <!-- ═══════════════ Cloud Networking TAB ═══════════════ -->
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Flow vs Connection vs Session – cloudnetworking.ai</title>
-  <meta name="description" content="Understanding the difference between flows, connections, and sessions in network and firewall terminology." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg: #0b1d2b;
-      --text: #ffffff;
-      --muted: #8b9db0;
-      --brand: #e2e8f0;
-      --brand2: #94a3b8;
-      --line: rgba(255,255,255,.10);
-      --radius: 16px;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      font-family: 'DM Sans', system-ui, sans-serif;
-      background: linear-gradient(160deg, #0d2436 0%, #0b1d2b 40%, #091a27 100%);
-      min-height: 100vh;
-      color: var(--text);
-      line-height: 1.7;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    a { color: var(--brand); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(11,29,43,.95);
-      border-bottom: 1px solid var(--line);
-      backdrop-filter: blur(16px);
-    }
-
-    .header-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 20px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      font-size: 13px;
-      font-weight: 700;
-      font-family: 'DM Sans', sans-serif;
-      transition: all .2s;
-    }
-    .back-btn:hover { background: rgba(255,255,255,.08); text-decoration: none; }
-
-    .header-title {
-      font-family: 'Space Mono', monospace;
-      font-size: 13px;
-      color: var(--muted);
-      margin-left: 4px;
-    }
-
-    .wrap {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 0 20px;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      padding: 52px 0 32px;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 40px;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 4px 12px;
-      margin-bottom: 20px;
-    }
-
-    .hero h1 {
-      font-size: 40px;
-      font-weight: 900;
-      margin: 0 0 14px;
-      line-height: 1.1;
-      color: #ffffff;
-    }
-
-    .hero h1 span {
-      color: var(--brand2);
-    }
-
-    .hero-meta {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 16px;
-    }
-
-    .hero-meta span { display: flex; align-items: center; gap: 6px; }
-
-    /* ── SUMMARY CARDS ROW ── */
-    .summary-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-bottom: 48px;
-    }
-
-    @media(max-width: 640px) {
-      .summary-row { grid-template-columns: 1fr; }
-      .hero h1 { font-size: 28px; }
-    }
-
-    .summary-card {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 20px;
-      background: rgba(255,255,255,.02);
-      position: relative;
-      overflow: hidden;
-      transition: border-color .2s, transform .2s;
-    }
-
-    .summary-card:hover {
-      border-color: rgba(255,255,255,.2);
-      transform: translateY(-2px);
-    }
-
-    .summary-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-    }
-
-    .summary-card.flow::before   { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
-    .summary-card.conn::before   { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
-    .summary-card.sess::before   { background: linear-gradient(90deg, #34d399, #10b981); }
-
-    .summary-card .num {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--muted);
-      margin-bottom: 8px;
-      letter-spacing: .06em;
-    }
-
-    .summary-card h3 {
-      font-size: 18px;
-      font-weight: 900;
-      margin: 0 0 8px;
-      color: #ffffff;
-    }
-
-    .summary-card.flow h3 { color: #93c5fd; }
-    .summary-card.conn h3 { color: #c4b5fd; }
-    .summary-card.sess h3 { color: #6ee7b7; }
-
-    .summary-card p {
-      font-size: 13px;
-      color: var(--muted);
-      margin: 0;
-      line-height: 1.55;
-    }
-
-    /* ── SECTIONS ── */
-    .section {
-      margin-bottom: 48px;
-      animation: fadeUp .5s ease both;
-    }
-
-    .section:nth-child(2) { animation-delay: .1s; }
-    .section:nth-child(3) { animation-delay: .2s; }
-    .section:nth-child(4) { animation-delay: .3s; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-
-    .section-num {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Space Mono', monospace;
-      font-size: 14px;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .flow   .section-num { background: rgba(59,130,246,.15); color: #93c5fd; border: 1px solid rgba(59,130,246,.25); }
-    .conn   .section-num { background: rgba(139,92,246,.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,.25); }
-    .sess   .section-num { background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.25); }
-
-    .section-header h2 {
-      font-size: 26px;
-      font-weight: 900;
-      margin: 0;
-      color: #ffffff;
-    }
-
-    .flow   .section-header h2 { color: #93c5fd; }
-    .conn   .section-header h2 { color: #c4b5fd; }
-    .sess   .section-header h2 { color: #6ee7b7; }
-
-    .section-body {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.02);
-      overflow: hidden;
-    }
-
-    .section-intro {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.7;
-    }
-
-    /* 5-tuple pills */
-    .tuple-row {
-      padding: 20px 24px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .tuple-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 10px;
-      width: 100%;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-
-    .tuple-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(59,130,246,.2);
-      background: rgba(59,130,246,.07);
-      font-size: 13px;
-      font-weight: 700;
-      color: #93c5fd;
-      font-family: 'Space Mono', monospace;
-    }
-
-    /* Key Characteristics */
-    .key-chars {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .key-chars-title {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 14px;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-
-    .char-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .char-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    .char-list li::before {
-      content: '→';
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      margin-top: 2px;
-      flex-shrink: 0;
-    }
-
-    .flow   .char-list li::before { color: #93c5fd; }
-    .conn   .char-list li::before { color: #c4b5fd; }
-    .sess   .char-list li::before { color: #6ee7b7; }
-
-    .char-list li strong { color: var(--text); }
-
-    /* Session stores */
-    .stores-grid {
-      padding: 20px 24px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 10px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .store-item {
-      padding: 10px 14px;
-      border: 1px solid rgba(16,185,129,.15);
-      border-radius: 10px;
-      background: rgba(16,185,129,.05);
-      font-size: 13px;
-      color: #6ee7b7;
-      font-family: 'Space Mono', monospace;
-    }
-
-    /* Firewall examples */
-    .fw-row {
-      padding: 14px 24px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .fw-badge {
-      padding: 5px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(255,255,255,.04);
-      color: var(--muted);
-      font-family: 'Space Mono', monospace;
-    }
-
-    /* Think of it as */
-    .think-box {
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255,255,255,.02);
-    }
-
-    .think-icon { font-size: 20px; }
-
-    .think-box p {
-      margin: 0;
-      font-size: 14px;
-      font-style: italic;
-      color: var(--muted);
-    }
-
-    .think-box p strong { color: var(--text); font-style: normal; }
-
-    /* ── HOW THEY RELATE ── */
-    .relate-section {
-      margin-bottom: 48px;
-    }
-
-    .relate-section h2 {
-      font-size: 24px;
-      font-weight: 900;
-      color: #ffffff;
-      margin: 0 0 20px;
-    }
-
-    .relate-box {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.02);
-      overflow: hidden;
-    }
-
-    .relate-header {
-      padding: 16px 24px;
-      border-bottom: 1px solid var(--line);
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-
-    .relate-diagram {
-      padding: 32px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .relate-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .relate-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      font-weight: 700;
-      width: 90px;
-      flex-shrink: 0;
-      text-align: right;
-    }
-
-    .relate-bar {
-      flex: 1;
-      height: 36px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-      font-size: 13px;
-      font-weight: 700;
-      position: relative;
-    }
-
-    .relate-row.flows .relate-label { color: #93c5fd; }
-    .relate-row.flows .relate-bar {
-      background: rgba(59,130,246,.1);
-      border: 1px solid rgba(59,130,246,.2);
-      color: #93c5fd;
-    }
-
-    .relate-row.conn .relate-label { color: #c4b5fd; }
-    .relate-row.conn .relate-bar {
-      background: rgba(139,92,246,.1);
-      border: 1px solid rgba(139,92,246,.2);
-      color: #c4b5fd;
-      max-width: 70%;
-    }
-
-    .relate-row.sess .relate-label { color: #6ee7b7; }
-    .relate-row.sess .relate-bar {
-      background: rgba(16,185,129,.1);
-      border: 1px solid rgba(16,185,129,.2);
-      color: #6ee7b7;
-      max-width: 40%;
-    }
-
-    .count-badge {
-      margin-left: auto;
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      background: rgba(255,255,255,.06);
-      padding: 2px 8px;
-      border-radius: 6px;
-    }
-
-    .relate-note {
-      padding: 16px 24px;
-      border-top: 1px solid var(--line);
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .relate-note code {
-      background: rgba(255,255,255,.07);
-      padding: 2px 7px;
-      border-radius: 5px;
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      color: var(--brand);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      margin-top: 60px;
-      padding: 20px 0;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 13px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      position: relative;
-      z-index: 1;
-    }
-  </style>
-</head>
-
-<body>
-
-<header>
-  <div class="header-inner">
-    <a class="back-btn" href="index.html">← Back</a>
-    <span class="header-title">cloudnetworking.ai · Networking Concepts</span>
-  </div>
-</header>
-
-<div class="wrap">
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-tag">📡 Networking Fundamentals</div>
-    <h1>Flow, Connection <span>&</span> Session</h1>
-    <p style="color:var(--muted); max-width:600px; margin:0; font-size:16px;">
-      Three terms you'll encounter constantly in networking and security — each with a distinct meaning that's easy to confuse.
-    </p>
-    <div class="hero-meta">
-      <span>📖 5 min read</span>
-      <span>🎯 Networking 101</span>
-      <span>🔥 Firewall Concepts</span>
+  <!-- ═══ CLOUD NETWORKING — Flow / Connection / Session ═══ -->
+  <div class="tab-panel" id="panel-networking">
+
+    <section class="page-hero">
+      <h1 style="color:#fff;margin:0 0 10px;font-size:34px;font-weight:900;">Cloud Networking</h1>
+      <p class="muted" style="margin:0;">Core concepts every network engineer must know — Flow, Connection, and Session.</p>
+    </section>
+
+    <div class="summary-row">
+      <div class="summary-card flow"><div class="num">01</div><h3>Flow</h3><p>One direction of traffic, defined by the 5-tuple. Two flows make a full conversation.</p></div>
+      <div class="summary-card conn"><div class="num">02</div><h3>Connection</h3><p>Both directions combined — a full conversation between two devices.</p></div>
+      <div class="summary-card sess"><div class="num">03</div><h3>Session</h3><p>The firewall's internal state entry tracking a connection in its session table.</p></div>
     </div>
-  </section>
 
-  <!-- SUMMARY CARDS -->
-  <div class="summary-row">
-    <div class="summary-card flow">
-      <div class="num">01</div>
-      <h3>Flow</h3>
-      <p>One direction of traffic. Defined by the 5-tuple. Two flows make up a full conversation.</p>
-    </div>
-    <div class="summary-card conn">
-      <div class="num">02</div>
-      <h3>Connection</h3>
-      <p>Both directions combined. A full conversation between two devices.</p>
-    </div>
-    <div class="summary-card sess">
-      <div class="num">03</div>
-      <h3>Session</h3>
-      <p>The firewall's internal state record tracking a connection in its session table.</p>
-    </div>
-  </div>
-
-  <!-- SECTION 1: FLOW -->
-  <div class="section flow">
-    <div class="section-header">
-      <div class="section-num">01</div>
-      <h2>Flow</h2>
-    </div>
-    <div class="section-body">
-      <div class="section-intro">
-        A flow is a <strong>unidirectional stream of packets</strong> that share the same five key attributes — commonly referred to as the <strong>5-tuple</strong>. If traffic travels from a client to a server, that is one flow. The return traffic is technically a <em>separate</em> flow because the direction changes.
-      </div>
-
-      <div class="tuple-row">
-        <div class="tuple-label">The 5-Tuple</div>
-        <div class="tuple-pill">📍 Source IP</div>
-        <div class="tuple-pill">🎯 Destination IP</div>
-        <div class="tuple-pill">🔌 Source Port</div>
-        <div class="tuple-pill">🔌 Destination Port</div>
-        <div class="tuple-pill">⚙️ Protocol</div>
-      </div>
-
-      <div class="key-chars">
-        <div class="key-chars-title">Key Characteristics</div>
-        <ul class="char-list">
-          <li><strong>Unidirectional</strong> — one direction only</li>
-          <li>Used heavily in <strong>monitoring systems</strong> — NetFlow, IPFIX, sFlow</li>
-          <li>Widely used in <strong>cloud flow logs</strong> — AWS VPC Flow Logs, Azure NSG Flow Logs</li>
-        </ul>
-      </div>
-
-      <div class="think-box">
-        <span class="think-icon">💡</span>
-        <p>Think of a flow as <strong>one direction of traffic</strong>.</p>
+    <!-- FLOW -->
+    <div class="fw-section flow">
+      <div class="fw-section-header"><div class="fw-num">01</div><h2>Flow</h2></div>
+      <div class="fw-body">
+        <div class="fw-intro">A flow is a <strong>unidirectional stream of packets</strong> that share the same five key attributes — the <strong>5-tuple</strong>. Client → Server is one flow. Server → Client is a separate flow because the direction changes.</div>
+        <div class="tuple-row">
+          <div class="tuple-label">The 5-Tuple</div>
+          <div class="tuple-pill">📍 Source IP</div>
+          <div class="tuple-pill">🎯 Destination IP</div>
+          <div class="tuple-pill">🔌 Source Port</div>
+          <div class="tuple-pill">🔌 Destination Port</div>
+          <div class="tuple-pill">⚙️ Protocol</div>
+        </div>
+        <div class="fw-chars">
+          <div class="fw-chars-title">Key Characteristics</div>
+          <ul class="char-list">
+            <li><strong>Unidirectional</strong> — one direction only</li>
+            <li>Used in <strong>monitoring systems</strong> — NetFlow, IPFIX, sFlow</li>
+            <li>Used in <strong>cloud flow logs</strong> — AWS VPC Flow Logs, Azure NSG Flow Logs</li>
+          </ul>
+        </div>
+        <div class="think-box"><span>💡</span><p>Think of a flow as <strong>one direction of traffic</strong>.</p></div>
       </div>
     </div>
-  </div>
 
-  <!-- SECTION 2: CONNECTION -->
-  <div class="section conn">
-    <div class="section-header">
-      <div class="section-num">02</div>
-      <h2>Connection</h2>
-    </div>
-    <div class="section-body">
-      <div class="section-intro">
-        A connection represents <strong>bidirectional communication</strong> between two endpoints. For TCP, it begins with the SYN handshake and both directions of traffic together form a single connection. Even though UDP is technically connectionless, most firewalls still treat UDP exchanges as connections for tracking purposes.
-      </div>
-
-      <div class="key-chars">
-        <div class="key-chars-title">Key Characteristics</div>
-        <ul class="char-list">
-          <li><strong>Bidirectional</strong> — both directions combined</li>
-          <li>Represents a <strong>full conversation</strong> between two devices</li>
-          <li>TCP connections begin with the <strong>SYN handshake</strong></li>
-          <li>Often used in <strong>traditional firewall terminology</strong></li>
-          <li>UDP is connectionless but firewalls still <strong>track it as a connection</strong></li>
-        </ul>
-      </div>
-
-      <div class="think-box">
-        <span class="think-icon">💡</span>
-        <p>Think of a connection as <strong>a full conversation</strong>.</p>
+    <!-- CONNECTION -->
+    <div class="fw-section conn">
+      <div class="fw-section-header"><div class="fw-num">02</div><h2>Connection</h2></div>
+      <div class="fw-body">
+        <div class="fw-intro">A connection represents <strong>bidirectional communication</strong> between two endpoints. For TCP it begins with the SYN handshake. UDP is connectionless but most firewalls still track UDP exchanges as connections.</div>
+        <div class="fw-chars">
+          <div class="fw-chars-title">Key Characteristics</div>
+          <ul class="char-list">
+            <li><strong>Bidirectional</strong> — both directions combined</li>
+            <li>TCP connections begin with the <strong>SYN handshake</strong></li>
+            <li>Often used in <strong>traditional firewall terminology</strong></li>
+            <li>UDP is connectionless but firewalls <strong>still track it</strong></li>
+          </ul>
+        </div>
+        <div class="think-box"><span>💡</span><p>Think of a connection as <strong>a full conversation</strong>.</p></div>
       </div>
     </div>
-  </div>
 
-  <!-- SECTION 3: SESSION -->
-  <div class="section sess">
-    <div class="section-header">
-      <div class="section-num">03</div>
-      <h2>Session</h2>
-    </div>
-    <div class="section-body">
-      <div class="section-intro">
-        A session is the <strong>firewall's internal state entry</strong> that tracks a connection. When traffic first matches a firewall policy, the rule is evaluated, NAT is applied, security profiles are assigned, and a session entry is created. After that, subsequent packets simply match the existing session — <em>no full policy lookup needed</em>.
-      </div>
-
-      <div class="key-chars">
-        <div class="key-chars-title">A session typically stores</div>
-        <ul class="char-list">
-          <li><strong>Original and translated IPs/ports</strong> — pre and post NAT</li>
-          <li><strong>Policy ID</strong> — which rule matched</li>
-          <li><strong>Timeout values</strong> — when to expire the entry</li>
-          <li><strong>Security profile information</strong> — AV, IPS, URL filtering</li>
-          <li><strong>Byte and packet counters</strong> — traffic statistics</li>
-        </ul>
-      </div>
-
-      <div class="stores-grid">
-        <div class="store-item">Original IPs/Ports</div>
-        <div class="store-item">Translated IPs/Ports</div>
-        <div class="store-item">Policy ID</div>
-        <div class="store-item">Timeout Values</div>
-        <div class="store-item">Security Profiles</div>
-        <div class="store-item">Byte Counters</div>
-        <div class="store-item">Packet Counters</div>
-      </div>
-
-      <div class="fw-row">
-        <span style="font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; width:100%; margin-bottom:4px;">Used in next-gen firewalls</span>
-        <span class="fw-badge">Fortinet FortiGate</span>
-        <span class="fw-badge">Palo Alto Networks</span>
-        <span class="fw-badge">Check Point</span>
-        <span class="fw-badge">Cisco FTD</span>
-      </div>
-
-      <div class="think-box">
-        <span class="think-icon">💡</span>
-        <p>Think of a session as <strong>the firewall's memory of a conversation</strong>.</p>
+    <!-- SESSION -->
+    <div class="fw-section sess">
+      <div class="fw-section-header"><div class="fw-num">03</div><h2>Session</h2></div>
+      <div class="fw-body">
+        <div class="fw-intro">A session is the <strong>firewall's internal state entry</strong> that tracks a connection. When traffic first matches a policy the rule is evaluated, NAT is applied, and a session entry is created. Subsequent packets simply match the existing session — <em>no full policy lookup needed</em>.</div>
+        <div class="fw-chars">
+          <div class="fw-chars-title">A session typically stores</div>
+          <ul class="char-list">
+            <li><strong>Original and translated IPs/ports</strong> — pre and post NAT</li>
+            <li><strong>Policy ID</strong> — which rule matched</li>
+            <li><strong>Timeout values</strong> — when to expire the entry</li>
+            <li><strong>Security profile information</strong> — AV, IPS, URL filtering</li>
+            <li><strong>Byte and packet counters</strong> — traffic statistics</li>
+          </ul>
+        </div>
+        <div class="stores-grid">
+          <div class="store-item">Original IPs/Ports</div>
+          <div class="store-item">Translated IPs/Ports</div>
+          <div class="store-item">Policy ID</div>
+          <div class="store-item">Timeout Values</div>
+          <div class="store-item">Security Profiles</div>
+          <div class="store-item">Byte Counters</div>
+          <div class="store-item">Packet Counters</div>
+        </div>
+        <div class="fw-badges">
+          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;width:100%;margin-bottom:4px;display:block;">Used in next-gen firewalls</span>
+          <span class="fw-badge">Fortinet FortiGate</span>
+          <span class="fw-badge">Palo Alto Networks</span>
+          <span class="fw-badge">Check Point</span>
+          <span class="fw-badge">Cisco FTD</span>
+        </div>
+        <div class="think-box"><span>💡</span><p>Think of a session as <strong>the firewall's memory of a conversation</strong>.</p></div>
       </div>
     </div>
-  </div>
 
-  <!-- HOW THEY RELATE -->
-  <div class="relate-section">
-    <h2>How They Relate</h2>
-    <div class="relate-box">
-      <div class="relate-header">For a single TCP interaction</div>
-      <div class="relate-diagram">
-
-        <div class="relate-row flows">
-          <div class="relate-label">Flows</div>
-          <div class="relate-bar">
-            Client → Server &nbsp;|&nbsp; Server → Client
-            <span class="count-badge">× 2</span>
+    <!-- HOW THEY RELATE -->
+    <div class="card">
+      <h2>How They Relate</h2>
+      <div class="relate-box">
+        <div class="relate-header">For a single TCP interaction</div>
+        <div class="relate-diagram">
+          <div class="relate-row flows">
+            <div class="relate-label">Flows</div>
+            <div class="relate-bar">Client → Server &nbsp;|&nbsp; Server → Client <span class="count-badge">× 2</span></div>
+          </div>
+          <div class="relate-row conn">
+            <div class="relate-label">Connection</div>
+            <div class="relate-bar">The full conversation <span class="count-badge">× 1</span></div>
+          </div>
+          <div class="relate-row sess">
+            <div class="relate-label">Session</div>
+            <div class="relate-bar">Firewall state record <span class="count-badge">× 1</span></div>
           </div>
         </div>
-
-        <div class="relate-row conn">
-          <div class="relate-label">Connection</div>
-          <div class="relate-bar">
-            The full conversation
-            <span class="count-badge">× 1</span>
-          </div>
-        </div>
-
-        <div class="relate-row sess">
-          <div class="relate-label">Session</div>
-          <div class="relate-bar">
-            Firewall state record
-            <span class="count-badge">× 1</span>
-          </div>
-        </div>
-
-      </div>
-      <div class="relate-note">
-        A single TCP interaction produces <code>2 flows</code>, <code>1 connection</code>, and <code>1 session</code> entry in the firewall's state table.
+        <div class="relate-note">A single TCP interaction produces <code>2 flows</code>, <code>1 connection</code>, and <code>1 session</code> in the firewall's state table.</div>
       </div>
     </div>
+
   </div>
 
-  <footer>
-    <span>© 2025 cloudnetworking.ai · Security &amp; Cloud Engineering</span>
-    <a href="index.html" style="color:var(--muted); font-size:13px;">← Back to Home</a>
-  </footer>
+  <!-- ═══ CLOUD SECURITY — DDoS ═══ -->
+  <div class="tab-panel" id="panel-security">
 
-</div>
-</body>
-</html>
-
-
-  <!-- ═══════════════ Cloud Security TAB ═══════════════ -->
-  <div class="tab-panel" id="panel-ddos">
-
-    <section class="page-hero" style="background: linear-gradient(135deg, rgba(255,255,255,.05), transparent);">
-      <h1 style="color:#ffffff; margin:0 0 10px; font-size:34px; font-weight:900;">Defending Against DDoS Attacks</h1>
+    <section class="page-hero">
+      <h1 style="color:#fff;margin:0 0 10px;font-size:34px;font-weight:900;">Cloud Security</h1>
       <p class="muted" style="margin:0;">How modern networks protect applications from volumetric, protocol, and application-layer attacks.</p>
-      <div class="ddos-stat-row">
-        <div class="ddos-stat"><b>Tbps</b><span>Volumetric Attacks</span></div>
-        <div class="ddos-stat"><b>Layers</b><span>L3 / L4 / L7</span></div>
-        <div class="ddos-stat"><b> How to Defend</b><span>Automated Mitigation</span></div>
+      <div class="stat-row">
+        <div class="stat-box"><b>Tbps</b><span>Volumetric Attacks</span></div>
+        <div class="stat-box"><b>L3 / L4 / L7</b><span>Attack Layers</span></div>
+        <div class="stat-box"><b>24×7</b><span>Automated Mitigation</span></div>
       </div>
     </section>
 
     <section class="card">
-      <h2 style="color:#ffffff;">What is a DDoS Attack?</h2>
-      <p class="muted">
-        A Distributed Denial of Service (DDoS) attack is an attempt to make an online service unavailable by overwhelming it with traffic from multiple sources.
-      </p>
+      <h2>What is a DDoS Attack?</h2>
+      <p class="muted">A Distributed Denial of Service (DDoS) attack is an attempt to make an online service unavailable by overwhelming it with traffic from multiple sources.</p>
     </section>
 
     <section class="card">
-      <h2 style="color:#ffffff;">Testing &amp; Resilience Validation</h2>
-
-      <div class="ddos-grid">
+      <h2>Testing &amp; Resilience Validation</h2>
+      <div class="two-col">
         <div>
           <h3>L3 / L4 Lab Tools</h3>
-          <p class="muted">Use only in environments you own or are authorised to test. Focus on behaviour validation and capacity planning.</p>
+          <p class="muted">Use only in environments you own or are authorised to test.</p>
           <ul class="tool-list">
             <li><span class="tool">hping3</span> Protocol behaviour testing</li>
             <li><span class="tool">iperf3</span> Throughput baseline</li>
             <li><span class="tool">tcpdump</span> Packet inspection</li>
           </ul>
-          <div class="callout">
-            Measure: SYN backlog, drops, conntrack usage, edge rate-limits.
-          </div>
+          <div class="callout">Measure: SYN backlog, drops, conntrack usage, edge rate-limits.</div>
         </div>
-
         <div>
           <h3>Layer 7 Load Testing</h3>
-          <p class="muted">Simulate real users and APIs to validate WAF, caching, rate-limiting, and autoscaling.</p>
+          <p class="muted">Simulate real users and APIs to validate WAF, caching, and autoscaling.</p>
           <ul class="tool-list">
-            <li><span class="tool">ab</span> Apache BenchMark ab -n 5000 -c 200 -v 2 https:</li>
+            <li><span class="tool">ab</span> Apache Benchmark — quick concurrency test</li>
             <li><span class="tool">k6</span> Scripted HTTP tests</li>
             <li><span class="tool">JMeter</span> API workflows</li>
-            <li><span class="tool">Locust</span> User behaviour</li>
+            <li><span class="tool">Locust</span> User behaviour simulation</li>
             <li><span class="tool">Gatling</span> High-performance load</li>
           </ul>
-          <div class="callout">
-            Measure: p95 latency, error rate, WAF challenges, cache hit ratio, scale-up time.
-          </div>
+          <div class="callout">Measure: p95 latency, error rate, WAF challenges, cache hit ratio, scale-up time.</div>
         </div>
       </div>
     </section>
 
     <section class="card">
-      <h2 style="color:#ffffff;">The Goal of DDoS Protection</h2>
-      <p class="muted">
-        The objective is not just to block traffic, but to ensure legitimate users always get through while attacks are absorbed at the network edge.
-      </p>
+      <h2>The Goal of DDoS Protection</h2>
+      <p class="muted">The objective is not just to block traffic, but to ensure legitimate users always get through while attacks are absorbed at the network edge.</p>
     </section>
 
   </div>
 
-  <!-- ═══════════════ BLOG Start with Packet Journey  TAB ═══════════════ -->
- 
-<div class="tab-panel" id="panel-packet">
+  <!-- ═══ BLOG ═══ -->
+  <div class="tab-panel" id="panel-blog">
 
     <section class="page-hero">
-      <h1 style="color:#ffffff; margin:0 0 10px; font-size:34px; font-weight:900;">A Packet Journey</h1>
+      <h1 style="color:#fff;margin:0 0 10px;font-size:34px;font-weight:900;">Blog</h1>
+      <p class="muted" style="margin:0;">Deep-dives on cloud networking and security concepts.</p>
+    </section>
+
+    <div class="blog-card" onclick="showTab('packet')">
+      <div class="meta">Feb 2026 · 15 min read · Networking 101</div>
+      <h2>A Packet Journey — From Your Computer to the Cloud</h2>
+      <p>Follow data from 0s and 1s all the way to the cloud — binary, transistors, OSI layers, MAC vs IP, network media, and real-world bandwidth explained.</p>
+      <div class="read-more">Read more →</div>
+    </div>
+
+    <a href="flow-connection-session.html" class="blog-card">
+      <div class="meta">Feb 2026 · 5 min read · Firewall Concepts</div>
+      <h2>Flow, Connection, and Sessions in Firewalls</h2>
+      <p>A flow is unidirectional, a connection is bidirectional, and a session is the firewall's state record. Three terms — clearly explained.</p>
+      <div class="read-more">Read more →</div>
+    </a>
+
+    <!-- ✏️ ADD MORE BLOG POST CARDS HERE -->
+
+  </div>
+
+  <!-- ═══ PACKET JOURNEY (opened from Blog) ═══ -->
+  <div class="tab-panel" id="panel-packet">
+
+    <section class="page-hero">
+      <h1 style="color:#fff;margin:0 0 10px;font-size:34px;font-weight:900;">A Packet Journey</h1>
       <p class="muted" style="margin:0 0 8px;">From Your Computer to the Cloud</p>
       <div class="reading-time">📖 Reading time: ~15 mins · Networking 101</div>
     </section>
 
+    <div style="margin-top:16px;">
+      <button class="cta-secondary" onclick="showTab('blog')">← Back to Blog</button>
+    </div>
+
     <section class="card">
       <h2>The Binary World: 0s and 1s</h2>
-      <p class="muted">
-        Have you ever wondered how data from your computer actually moves across the internet and ends up in the cloud? Let's start from the very basics.
-      </p>
-      <p class="muted">
-        Computers operate using the <strong>binary number system</strong>, which has only two digits: 0 and 1. This is different from the decimal system, which has ten digits (0–9).
-      </p>
-      <p class="muted">
-        Example: To convert 13 into binary:<br>
-        13 = 8 + 4 + 1 = 2³ + 2² + 2⁰<br>
-        Binary representation: <code>1101</code>
-      </p>
+      <p class="muted">Have you ever wondered how data from your computer actually moves across the internet and ends up in the cloud? Let's start from the very basics.</p>
+      <p class="muted">Computers operate using the <strong>binary number system</strong> — only two digits: 0 and 1.</p>
+      <p class="muted">Example: To convert 13 into binary:<br>13 = 8 + 4 + 1 = 2³ + 2² + 2⁰ → <code>1101</code></p>
     </section>
 
     <section class="card">
       <h2>How Are 0s and 1s Created?</h2>
-      <p class="muted">
-        At the lowest level, computers use <strong>transistors</strong>. A transistor can either be On (1) or Off (0).
-      </p>
-      <p class="muted">
-        Imagine memory as billions of tiny switches. Each switch is called a <strong>bit</strong>, and eight bits together form a <strong>byte</strong>.
-      </p>
+      <p class="muted">At the lowest level, computers use <strong>transistors</strong> — On (1) or Off (0). Each switch is a <strong>bit</strong>; eight bits form a <strong>byte</strong>.</p>
     </section>
 
     <section class="card">
       <h2>How Does the Computer Understand Them?</h2>
-      <ul class="muted">
+      <ul>
         <li>Hardware layer</li>
         <li>Kernel and device driver layer</li>
         <li>Operating system layer</li>
         <li>Application layer</li>
       </ul>
-      <p class="muted">When you save a file, the application informs the OS, which uses drivers to write data to the hard drive.</p>
+      <p class="muted">When you save a file, the application informs the OS, which uses drivers to write data to the drive.</p>
     </section>
 
     <section class="card">
       <h2>Encoding of Data</h2>
-      <p class="muted">
-        Every character is encoded for efficient storage and transmission using formats like ASCII or UTF (Unicode).
-      </p>
-      <p class="muted">Example: The word <strong>network</strong> uses 7 characters → file size is 7 bytes.</p>
+      <p class="muted">Every character is encoded using ASCII or UTF (Unicode). The word <strong>network</strong> uses 7 characters → file size is 7 bytes.</p>
     </section>
 
     <section class="card">
       <h2>MAC vs IP Address</h2>
-      <p class="muted">
-        At the software level, systems care about IP addresses. At the local network level, devices use MAC addresses.
-      </p>
-      <p class="muted">
-        MAC addresses are 48-bit (6 octets) identifiers defined by IEEE 802.3 and never leave the local network.
-      </p>
+      <p class="muted">Systems care about IP addresses at the software level. At the local network level, devices use MAC addresses — 48-bit identifiers (IEEE 802.3) that never leave the local network.</p>
     </section>
 
     <section class="card">
       <h2>OSI Layers and Packet Formation</h2>
-      <ul class="muted">
+      <ul>
         <li><strong>Transport</strong> → Segment</li>
         <li><strong>Network</strong> → Packet</li>
         <li><strong>Data Link</strong> → Frame</li>
         <li><strong>Physical</strong> → Bits</li>
       </ul>
-      <p class="muted">Each layer adds its own header. At the destination, headers are removed in reverse order.
-      </p>
+      <p class="muted">Each layer adds its own header. At the destination, headers are removed in reverse order.</p>
     </section>
 
     <section class="card">
       <h2>Network Media</h2>
-      <ul class="muted">
+      <ul>
         <li><strong>Ethernet</strong>: electrical pulses over copper or fiber</li>
         <li><strong>Fiber</strong>: light pulses over glass</li>
         <li><strong>Wireless</strong>: radio waves (WiFi)</li>
@@ -1547,11 +639,8 @@
 
     <section class="card">
       <h2>Network Topologies</h2>
-      <ul class="muted">
-        <li>Bus</li>
-        <li>Ring</li>
-        <li><strong>Star</strong> (most common)</li>
-        <li>Mesh</li>
+      <ul>
+        <li>Bus · Ring · <strong>Star</strong> (most common) · Mesh</li>
       </ul>
     </section>
 
@@ -1561,25 +650,13 @@
       <p class="muted"><strong>Latency:</strong> Time taken for a packet to travel (ms).</p>
       <p class="muted"><strong>Throughput:</strong> Actual successful data rate.</p>
       <p class="muted"><strong>Speed:</strong> Physical signal rate of the medium.</p>
-    </section>
-
-    <section class="card">
-      <h2>Real-Life Example</h2>
-      <p class="muted">
-        A 1 Gbps connection = 1024 Mbps = 128 MB/s.<br>
-        A 1 GB file can be downloaded in about 8 seconds.
-      </p>
+      <p class="muted">A 1 Gbps connection = 128 MB/s. A 1 GB file downloads in ~8 seconds.</p>
     </section>
 
     <section class="card">
       <h2>The Journey Ends in the Cloud ☁️</h2>
-      <p class="muted">
-        The data you're reading travelled from a VS Code , across multiple networks, and reached you via the page hosted in cloud.
-      </p>
+      <p class="muted">The data you're reading travelled from a VS Code editor, across multiple networks, and reached you via this page hosted in the cloud.</p>
     </section>
-
-  </div>
-    <!-- ✏️ END OF BLOG POST BLOCK -->
 
   </div>
 
@@ -1589,8 +666,8 @@
   <span>© 2026 cloudnetworking.ai · Security &amp; Cloud Engineering</span>
   <div class="footer-links">
     <a href="#" onclick="showTab('home'); return false;">Home</a>
-    <a href="#" onclick="showTab('networking'); return false;">Networking</a>
-    <a href="#" onclick="showTab('security'); return false;">Security</a>
+    <a href="#" onclick="showTab('networking'); return false;">Cloud Networking</a>
+    <a href="#" onclick="showTab('security'); return false;">Cloud Security</a>
     <a href="#" onclick="showTab('blog'); return false;">Blog</a>
     <a href="#about" onclick="showTab('home'); setTimeout(()=>document.getElementById('about').scrollIntoView({behavior:'smooth'}),100); return false;">About</a>
   </div>
@@ -1599,18 +676,18 @@
 
 <script>
   function showTab(name) {
-    // Update buttons
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('tab-' + name);
+    if (btn) btn.classList.add('active');
 
-    // Update panels
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     const panel = document.getElementById('panel-' + name);
-    panel.classList.add('active');
-    panel.classList.remove('fade-in');
-    void panel.offsetWidth; // reflow
-    panel.classList.add('fade-in');
-
+    if (panel) {
+      panel.classList.add('active');
+      panel.classList.remove('fade-in');
+      void panel.offsetWidth;
+      panel.classList.add('fade-in');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
