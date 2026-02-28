@@ -557,7 +557,7 @@
     </a>
     <nav class="tab-nav">
       <button class="tab-btn active" onclick="showTab('home')" id="tab-home">Home</button>
-      <button class="tab-btn" onclick="showTab('packet')" id="tab-packet">📦 Packet Journey</button>
+      <button class="tab-btn" onclick="showTab('packet')" id="tab-packet">📦 Cloud Networkingy</button>
       <button class="tab-btn" onclick="showTab('ddos')" id="tab-ddos">🛡️ Cloud Security</button>
       <button class="tab-btn" onclick="showTab('blog')" id="tab-blog">📝 Blog</button>
     </nav>
@@ -578,8 +578,8 @@
         not vendor marketing.
       </p>
       <div class="cta-row">
-        <button class="cta-primary" onclick="showTab('packet')">🚀 Start with Packet Journey</button>
-        <button class="cta-secondary" onclick="showTab('cloud security')">🛡️ Cloud Security Basics</button>
+        <button class="cta-primary" onclick="showTab('Cloud Networking')">🚀 Cloud Networking</button>
+        <button class="cta-secondary" onclick="showTab('Cloud Security')">🛡️ Cloud Security Basics</button>
       </div>
       <div class="pill-row">
         <span class="pill">Beginner-friendly</span>
@@ -600,9 +600,9 @@
     <section class="card">
       <h2>Explore Topics</h2>
       <div class="topic-grid">
-        <div class="topic-card packet" onclick="showTab('packet')">
+        <div class="topic-card cloud networking" onclick="showTab('cloud networking')">
           <span class="icon">📦</span>
-          <h3>A Packet Journey</h3>
+          <h3>Cloud Network</h3>
           <p>From 0s and 1s to the cloud — follow data across every layer of the network stack.</p>
           <div class="arrow">Read article →</div>
         </div>
@@ -652,8 +652,816 @@
 
   </div>
 
-  <!-- ═══════════════ PACKET JOURNEY TAB ═══════════════ -->
-  <div class="tab-panel" id="panel-packet">
+  <!-- ═══════════════ Cloud Networking TAB ═══════════════ -->
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Flow vs Connection vs Session – cloudnetworking.ai</title>
+  <meta name="description" content="Understanding the difference between flows, connections, and sessions in network and firewall terminology." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0b1d2b;
+      --text: #ffffff;
+      --muted: #8b9db0;
+      --brand: #e2e8f0;
+      --brand2: #94a3b8;
+      --line: rgba(255,255,255,.10);
+      --radius: 16px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: linear-gradient(160deg, #0d2436 0%, #0b1d2b 40%, #091a27 100%);
+      min-height: 100vh;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11,29,43,.95);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      transition: all .2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,.08); text-decoration: none; }
+
+    .header-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+      margin-left: 4px;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 52px 0 32px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 40px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 12px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: 40px;
+      font-weight: 900;
+      margin: 0 0 14px;
+      line-height: 1.1;
+      color: #ffffff;
+    }
+
+    .hero h1 span {
+      color: var(--brand2);
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
+    .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+    /* ── SUMMARY CARDS ROW ── */
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 48px;
+    }
+
+    @media(max-width: 640px) {
+      .summary-row { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 28px; }
+    }
+
+    .summary-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      background: rgba(255,255,255,.02);
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .summary-card:hover {
+      border-color: rgba(255,255,255,.2);
+      transform: translateY(-2px);
+    }
+
+    .summary-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+
+    .summary-card.flow::before   { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+    .summary-card.conn::before   { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+    .summary-card.sess::before   { background: linear-gradient(90deg, #34d399, #10b981); }
+
+    .summary-card .num {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 8px;
+      letter-spacing: .06em;
+    }
+
+    .summary-card h3 {
+      font-size: 18px;
+      font-weight: 900;
+      margin: 0 0 8px;
+      color: #ffffff;
+    }
+
+    .summary-card.flow h3 { color: #93c5fd; }
+    .summary-card.conn h3 { color: #c4b5fd; }
+    .summary-card.sess h3 { color: #6ee7b7; }
+
+    .summary-card p {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      margin-bottom: 48px;
+      animation: fadeUp .5s ease both;
+    }
+
+    .section:nth-child(2) { animation-delay: .1s; }
+    .section:nth-child(3) { animation-delay: .2s; }
+    .section:nth-child(4) { animation-delay: .3s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .section-num {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .flow   .section-num { background: rgba(59,130,246,.15); color: #93c5fd; border: 1px solid rgba(59,130,246,.25); }
+    .conn   .section-num { background: rgba(139,92,246,.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,.25); }
+    .sess   .section-num { background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.25); }
+
+    .section-header h2 {
+      font-size: 26px;
+      font-weight: 900;
+      margin: 0;
+      color: #ffffff;
+    }
+
+    .flow   .section-header h2 { color: #93c5fd; }
+    .conn   .section-header h2 { color: #c4b5fd; }
+    .sess   .section-header h2 { color: #6ee7b7; }
+
+    .section-body {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.02);
+      overflow: hidden;
+    }
+
+    .section-intro {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* 5-tuple pills */
+    .tuple-row {
+      padding: 20px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tuple-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      width: 100%;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .tuple-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(59,130,246,.2);
+      background: rgba(59,130,246,.07);
+      font-size: 13px;
+      font-weight: 700;
+      color: #93c5fd;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* Key Characteristics */
+    .key-chars {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .key-chars-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .char-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .char-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .char-list li::before {
+      content: '→';
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .flow   .char-list li::before { color: #93c5fd; }
+    .conn   .char-list li::before { color: #c4b5fd; }
+    .sess   .char-list li::before { color: #6ee7b7; }
+
+    .char-list li strong { color: var(--text); }
+
+    /* Session stores */
+    .stores-grid {
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .store-item {
+      padding: 10px 14px;
+      border: 1px solid rgba(16,185,129,.15);
+      border-radius: 10px;
+      background: rgba(16,185,129,.05);
+      font-size: 13px;
+      color: #6ee7b7;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* Firewall examples */
+    .fw-row {
+      padding: 14px 24px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .fw-badge {
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* Think of it as */
+    .think-box {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,.02);
+    }
+
+    .think-icon { font-size: 20px; }
+
+    .think-box p {
+      margin: 0;
+      font-size: 14px;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .think-box p strong { color: var(--text); font-style: normal; }
+
+    /* ── HOW THEY RELATE ── */
+    .relate-section {
+      margin-bottom: 48px;
+    }
+
+    .relate-section h2 {
+      font-size: 24px;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0 0 20px;
+    }
+
+    .relate-box {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.02);
+      overflow: hidden;
+    }
+
+    .relate-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--line);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .relate-diagram {
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .relate-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .relate-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      width: 90px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    .relate-bar {
+      flex: 1;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 700;
+      position: relative;
+    }
+
+    .relate-row.flows .relate-label { color: #93c5fd; }
+    .relate-row.flows .relate-bar {
+      background: rgba(59,130,246,.1);
+      border: 1px solid rgba(59,130,246,.2);
+      color: #93c5fd;
+    }
+
+    .relate-row.conn .relate-label { color: #c4b5fd; }
+    .relate-row.conn .relate-bar {
+      background: rgba(139,92,246,.1);
+      border: 1px solid rgba(139,92,246,.2);
+      color: #c4b5fd;
+      max-width: 70%;
+    }
+
+    .relate-row.sess .relate-label { color: #6ee7b7; }
+    .relate-row.sess .relate-bar {
+      background: rgba(16,185,129,.1);
+      border: 1px solid rgba(16,185,129,.2);
+      color: #6ee7b7;
+      max-width: 40%;
+    }
+
+    .count-badge {
+      margin-left: auto;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      background: rgba(255,255,255,.06);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .relate-note {
+      padding: 16px 24px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .relate-note code {
+      background: rgba(255,255,255,.07);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--brand);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 60px;
+      padding: 20px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="back-btn" href="index.html">← Back</a>
+    <span class="header-title">cloudnetworking.ai · Networking Concepts</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">📡 Networking Fundamentals</div>
+    <h1>Flow, Connection <span>&</span> Session</h1>
+    <p style="color:var(--muted); max-width:600px; margin:0; font-size:16px;">
+      Three terms you'll encounter constantly in networking and security — each with a distinct meaning that's easy to confuse.
+    </p>
+    <div class="hero-meta">
+      <span>📖 5 min read</span>
+      <span>🎯 Networking 101</span>
+      <span>🔥 Firewall Concepts</span>
+    </div>
+  </section>
+
+  <!-- SUMMARY CARDS -->
+  <div class="summary-row">
+    <div class="summary-card flow">
+      <div class="num">01</div>
+      <h3>Flow</h3>
+      <p>One direction of traffic. Defined by the 5-tuple. Two flows make up a full conversation.</p>
+    </div>
+    <div class="summary-card conn">
+      <div class="num">02</div>
+      <h3>Connection</h3>
+      <p>Both directions combined. A full conversation between two devices.</p>
+    </div>
+    <div class="summary-card sess">
+      <div class="num">03</div>
+      <h3>Session</h3>
+      <p>The firewall's internal state record tracking a connection in its session table.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 1: FLOW -->
+  <div class="section flow">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2>Flow</h2>
+    </div>
+    <div class="section-body">
+      <div class="section-intro">
+        A flow is a <strong>unidirectional stream of packets</strong> that share the same five key attributes — commonly referred to as the <strong>5-tuple</strong>. If traffic travels from a client to a server, that is one flow. The return traffic is technically a <em>separate</em> flow because the direction changes.
+      </div>
+
+      <div class="tuple-row">
+        <div class="tuple-label">The 5-Tuple</div>
+        <div class="tuple-pill">📍 Source IP</div>
+        <div class="tuple-pill">🎯 Destination IP</div>
+        <div class="tuple-pill">🔌 Source Port</div>
+        <div class="tuple-pill">🔌 Destination Port</div>
+        <div class="tuple-pill">⚙️ Protocol</div>
+      </div>
+
+      <div class="key-chars">
+        <div class="key-chars-title">Key Characteristics</div>
+        <ul class="char-list">
+          <li><strong>Unidirectional</strong> — one direction only</li>
+          <li>Used heavily in <strong>monitoring systems</strong> — NetFlow, IPFIX, sFlow</li>
+          <li>Widely used in <strong>cloud flow logs</strong> — AWS VPC Flow Logs, Azure NSG Flow Logs</li>
+        </ul>
+      </div>
+
+      <div class="think-box">
+        <span class="think-icon">💡</span>
+        <p>Think of a flow as <strong>one direction of traffic</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: CONNECTION -->
+  <div class="section conn">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <h2>Connection</h2>
+    </div>
+    <div class="section-body">
+      <div class="section-intro">
+        A connection represents <strong>bidirectional communication</strong> between two endpoints. For TCP, it begins with the SYN handshake and both directions of traffic together form a single connection. Even though UDP is technically connectionless, most firewalls still treat UDP exchanges as connections for tracking purposes.
+      </div>
+
+      <div class="key-chars">
+        <div class="key-chars-title">Key Characteristics</div>
+        <ul class="char-list">
+          <li><strong>Bidirectional</strong> — both directions combined</li>
+          <li>Represents a <strong>full conversation</strong> between two devices</li>
+          <li>TCP connections begin with the <strong>SYN handshake</strong></li>
+          <li>Often used in <strong>traditional firewall terminology</strong></li>
+          <li>UDP is connectionless but firewalls still <strong>track it as a connection</strong></li>
+        </ul>
+      </div>
+
+      <div class="think-box">
+        <span class="think-icon">💡</span>
+        <p>Think of a connection as <strong>a full conversation</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: SESSION -->
+  <div class="section sess">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <h2>Session</h2>
+    </div>
+    <div class="section-body">
+      <div class="section-intro">
+        A session is the <strong>firewall's internal state entry</strong> that tracks a connection. When traffic first matches a firewall policy, the rule is evaluated, NAT is applied, security profiles are assigned, and a session entry is created. After that, subsequent packets simply match the existing session — <em>no full policy lookup needed</em>.
+      </div>
+
+      <div class="key-chars">
+        <div class="key-chars-title">A session typically stores</div>
+        <ul class="char-list">
+          <li><strong>Original and translated IPs/ports</strong> — pre and post NAT</li>
+          <li><strong>Policy ID</strong> — which rule matched</li>
+          <li><strong>Timeout values</strong> — when to expire the entry</li>
+          <li><strong>Security profile information</strong> — AV, IPS, URL filtering</li>
+          <li><strong>Byte and packet counters</strong> — traffic statistics</li>
+        </ul>
+      </div>
+
+      <div class="stores-grid">
+        <div class="store-item">Original IPs/Ports</div>
+        <div class="store-item">Translated IPs/Ports</div>
+        <div class="store-item">Policy ID</div>
+        <div class="store-item">Timeout Values</div>
+        <div class="store-item">Security Profiles</div>
+        <div class="store-item">Byte Counters</div>
+        <div class="store-item">Packet Counters</div>
+      </div>
+
+      <div class="fw-row">
+        <span style="font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; width:100%; margin-bottom:4px;">Used in next-gen firewalls</span>
+        <span class="fw-badge">Fortinet FortiGate</span>
+        <span class="fw-badge">Palo Alto Networks</span>
+        <span class="fw-badge">Check Point</span>
+        <span class="fw-badge">Cisco FTD</span>
+      </div>
+
+      <div class="think-box">
+        <span class="think-icon">💡</span>
+        <p>Think of a session as <strong>the firewall's memory of a conversation</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW THEY RELATE -->
+  <div class="relate-section">
+    <h2>How They Relate</h2>
+    <div class="relate-box">
+      <div class="relate-header">For a single TCP interaction</div>
+      <div class="relate-diagram">
+
+        <div class="relate-row flows">
+          <div class="relate-label">Flows</div>
+          <div class="relate-bar">
+            Client → Server &nbsp;|&nbsp; Server → Client
+            <span class="count-badge">× 2</span>
+          </div>
+        </div>
+
+        <div class="relate-row conn">
+          <div class="relate-label">Connection</div>
+          <div class="relate-bar">
+            The full conversation
+            <span class="count-badge">× 1</span>
+          </div>
+        </div>
+
+        <div class="relate-row sess">
+          <div class="relate-label">Session</div>
+          <div class="relate-bar">
+            Firewall state record
+            <span class="count-badge">× 1</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="relate-note">
+        A single TCP interaction produces <code>2 flows</code>, <code>1 connection</code>, and <code>1 session</code> entry in the firewall's state table.
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>© 2025 cloudnetworking.ai · Security &amp; Cloud Engineering</span>
+    <a href="index.html" style="color:var(--muted); font-size:13px;">← Back to Home</a>
+  </footer>
+
+</div>
+</body>
+</html>
+
+
+  <!-- ═══════════════ Cloud Security TAB ═══════════════ -->
+  <div class="tab-panel" id="panel-ddos">
+
+    <section class="page-hero" style="background: linear-gradient(135deg, rgba(255,255,255,.05), transparent);">
+      <h1 style="color:#ffffff; margin:0 0 10px; font-size:34px; font-weight:900;">Defending Against DDoS Attacks</h1>
+      <p class="muted" style="margin:0;">How modern networks protect applications from volumetric, protocol, and application-layer attacks.</p>
+      <div class="ddos-stat-row">
+        <div class="ddos-stat"><b>Tbps</b><span>Volumetric Attacks</span></div>
+        <div class="ddos-stat"><b>Layers</b><span>L3 / L4 / L7</span></div>
+        <div class="ddos-stat"><b> How to Defend</b><span>Automated Mitigation</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 style="color:#ffffff;">What is a DDoS Attack?</h2>
+      <p class="muted">
+        A Distributed Denial of Service (DDoS) attack is an attempt to make an online service unavailable by overwhelming it with traffic from multiple sources.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2 style="color:#ffffff;">Testing &amp; Resilience Validation</h2>
+
+      <div class="ddos-grid">
+        <div>
+          <h3>L3 / L4 Lab Tools</h3>
+          <p class="muted">Use only in environments you own or are authorised to test. Focus on behaviour validation and capacity planning.</p>
+          <ul class="tool-list">
+            <li><span class="tool">hping3</span> Protocol behaviour testing</li>
+            <li><span class="tool">iperf3</span> Throughput baseline</li>
+            <li><span class="tool">tcpdump</span> Packet inspection</li>
+          </ul>
+          <div class="callout">
+            Measure: SYN backlog, drops, conntrack usage, edge rate-limits.
+          </div>
+        </div>
+
+        <div>
+          <h3>Layer 7 Load Testing</h3>
+          <p class="muted">Simulate real users and APIs to validate WAF, caching, rate-limiting, and autoscaling.</p>
+          <ul class="tool-list">
+            <li><span class="tool">ab</span> Apache BenchMark ab -n 5000 -c 200 -v 2 https:</li>
+            <li><span class="tool">k6</span> Scripted HTTP tests</li>
+            <li><span class="tool">JMeter</span> API workflows</li>
+            <li><span class="tool">Locust</span> User behaviour</li>
+            <li><span class="tool">Gatling</span> High-performance load</li>
+          </ul>
+          <div class="callout">
+            Measure: p95 latency, error rate, WAF challenges, cache hit ratio, scale-up time.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 style="color:#ffffff;">The Goal of DDoS Protection</h2>
+      <p class="muted">
+        The objective is not just to block traffic, but to ensure legitimate users always get through while attacks are absorbed at the network edge.
+      </p>
+    </section>
+
+  </div>
+
+  <!-- ═══════════════ BLOG Start with Packet Journey  TAB ═══════════════ -->
+ 
+<div class="tab-panel" id="panel-packet">
 
     <section class="page-hero">
       <h1 style="color:#ffffff; margin:0 0 10px; font-size:34px; font-weight:900;">A Packet Journey</h1>
@@ -724,98 +1532,7 @@
         <li><strong>Physical</strong> → Bits</li>
       </ul>
       <p class="muted">Each layer adds its own header. At the destination, headers are removed in reverse order.
-      1️⃣ Flow
-
-A flow is a unidirectional stream of packets that share the same five key attributes:
-
-Source IP
-
-Destination IP
-
-Source Port
-
-Destination Port
-
-Protocol
-
-This is commonly referred to as the 5-tuple.
-
-If traffic travels from a client to a server, that is one flow.
-The return traffic from server to client is technically a separate flow because the direction changes.
-
-Key Characteristics:
-
-Unidirectional
-
-Used heavily in monitoring systems (NetFlow, IPFIX, sFlow)
-
-Often used in cloud “flow logs” (AWS, Azure)
-
-Think of a flow as one direction of traffic.
-
-2️⃣ Connection
-
-A connection represents bidirectional communication between two endpoints.
-
-For TCP:
-
-It begins with the SYN handshake.
-
-Both directions of traffic together form a single connection.
-
-Even though UDP is technically connectionless, most firewalls still treat UDP exchanges as connections for tracking purposes.
-
-Key Characteristics:
-
-Bidirectional
-
-Represents a conversation between two devices
-
-Often used in traditional firewall terminology
-
-Think of a connection as a full conversation.
-
-3️⃣ Session
-
-A session is the firewall’s internal state entry that tracks a connection.
-
-When traffic first matches a firewall policy:
-
-The rule is evaluated.
-
-NAT is applied (if configured).
-
-Security inspection profiles are assigned.
-
-A session entry is created in the firewall’s session table.
-
-After that, subsequent packets do not go through full policy lookup — they simply match the existing session.
-
-A session typically stores:
-
-Original and translated IPs/ports
-
-Policy ID
-
-Timeout values
-
-Security profile information
-
-Byte and packet counters
-
-Most next-generation firewalls (Fortinet, Palo Alto, etc.) use the term session as the primary tracking object.
-
-Think of a session as the firewall’s memory of a conversation.
-
-How They Relate
-
-For a single TCP interaction:
-
-2 flows (forward and reverse)
-
-1 connection (the conversation)
-
-1 session (the firewall’s state record)</p>
+      </p>
     </section>
 
     <section class="card">
@@ -857,95 +1574,11 @@ For a single TCP interaction:
     <section class="card">
       <h2>The Journey Ends in the Cloud ☁️</h2>
       <p class="muted">
-        The data you're reading travelled from a VS Code editor, across multiple networks, and reached you via the cloud.
+        The data you're reading travelled from a VS Code , across multiple networks, and reached you via the page hosted in cloud.
       </p>
     </section>
 
   </div>
-
-  <!-- ═══════════════ DDOS TAB ═══════════════ -->
-  <div class="tab-panel" id="panel-ddos">
-
-    <section class="page-hero" style="background: linear-gradient(135deg, rgba(255,255,255,.05), transparent);">
-      <h1 style="color:#ffffff; margin:0 0 10px; font-size:34px; font-weight:900;">Defending Against DDoS Attacks</h1>
-      <p class="muted" style="margin:0;">How modern networks protect applications from volumetric, protocol, and application-layer attacks.</p>
-      <div class="ddos-stat-row">
-        <div class="ddos-stat"><b>Tbps</b><span>Volumetric Attacks</span></div>
-        <div class="ddos-stat"><b>Layers</b><span>L3 / L4 / L7</span></div>
-        <div class="ddos-stat"><b> How to Defend</b><span>Automated Mitigation</span></div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2 style="color:#ffffff;">What is a DDoS Attack?</h2>
-      <p class="muted">
-        A Distributed Denial of Service (DDoS) attack is an attempt to make an online service unavailable by overwhelming it with traffic from multiple sources.
-      </p>
-    </section>
-
-    <section class="card">
-      <h2 style="color:#ffffff;">Testing &amp; Resilience Validation</h2>
-
-      <div class="ddos-grid">
-        <div>
-          <h3>L3 / L4 Lab Tools</h3>
-          <p class="muted">Use only in environments you own or are authorised to test. Focus on behaviour validation and capacity planning.</p>
-          <ul class="tool-list">
-            <li><span class="tool">hping3</span> Protocol behaviour testing</li>
-            <li><span class="tool">iperf3</span> Throughput baseline</li>
-            <li><span class="tool">tcpdump</span> Packet inspection</li>
-          </ul>
-          <div class="callout">
-            Measure: SYN backlog, drops, conntrack usage, edge rate-limits.
-          </div>
-        </div>
-
-        <div>
-          <h3>Layer 7 Load Testing</h3>
-          <p class="muted">Simulate real users and APIs to validate WAF, caching, rate-limiting, and autoscaling.</p>
-          <ul class="tool-list">
-            <li><span class="tool">ab</span> Apache BenchMark ab -n 5000 -c 200 -v 2 https:</li>
-            <li><span class="tool">k6</span> Scripted HTTP tests</li>
-            <li><span class="tool">JMeter</span> API workflows</li>
-            <li><span class="tool">Locust</span> User behaviour</li>
-            <li><span class="tool">Gatling</span> High-performance load</li>
-          </ul>
-          <div class="callout">
-            Measure: p95 latency, error rate, WAF challenges, cache hit ratio, scale-up time.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2 style="color:#ffffff;">The Goal of DDoS Protection</h2>
-      <p class="muted">
-        The objective is not just to block traffic, but to ensure legitimate users always get through while attacks are absorbed at the network edge.
-      </p>
-    </section>
-
-  </div>
-
-  <!-- ═══════════════ BLOG TAB ═══════════════ -->
-  <div class="tab-panel" id="panel-blog">
-
-    <section class="page-hero">
-      <h1 style="color:#ffffff; margin:0 0 10px; font-size:34px; font-weight:900;">Blog</h1>
-      <p class="muted" style="margin:0;">Understanding Flow, Connection, and Session in Firewall.</p>
-    </section>
-
-    <!-- ✏️ ADD YOUR BLOG POST CARDS BELOW — copy this block for each post -->
-
-    <section class="card" style="cursor:pointer;">
-      <p class="muted" style="font-size:12px; margin:0 0 8px;">Feb 2026 · 5 min read</p>
-      <h2>Flow, Connection, and Sessions in Firewalls</h2>
-      <p class="muted">
-       A flow is a unidirectional stream of packets that share the same five key attributes.
-       A connection represents bidirectional communication between two endpoint
-       A session is the firewall’s internal state entry that tracks a connection.</p>
-      <span style="font-size:13px; color:var(--brand); font-weight:700;">Read more →</span>
-    </section>
-
     <!-- ✏️ END OF BLOG POST BLOCK -->
 
   </div>
