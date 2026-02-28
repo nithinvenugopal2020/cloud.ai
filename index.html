@@ -558,7 +558,7 @@
     <nav class="tab-nav">
       <button class="tab-btn active" onclick="showTab('home')" id="tab-home">Home</button>
       <button class="tab-btn" onclick="showTab('packet')" id="tab-packet">📦 Packet Journey</button>
-      <button class="tab-btn" onclick="showTab('ddos')" id="tab-ddos">🛡️ DDoS</button>
+      <button class="tab-btn" onclick="showTab('ddos')" id="tab-ddos">🛡️ Cloud Security</button>
       <button class="tab-btn" onclick="showTab('blog')" id="tab-blog">📝 Blog</button>
     </nav>
   </div>
@@ -579,7 +579,7 @@
       </p>
       <div class="cta-row">
         <button class="cta-primary" onclick="showTab('packet')">🚀 Start with Packet Journey</button>
-        <button class="cta-secondary" onclick="showTab('ddos')">🛡️ Explore DDoS Basics</button>
+        <button class="cta-secondary" onclick="showTab('cloud security')">🛡️ Cloud Security Basics</button>
       </div>
       <div class="pill-row">
         <span class="pill">Beginner-friendly</span>
@@ -606,10 +606,10 @@
           <p>From 0s and 1s to the cloud — follow data across every layer of the network stack.</p>
           <div class="arrow">Read article →</div>
         </div>
-        <div class="topic-card ddos" onclick="showTab('ddos')">
+        <div class="topic-card cloud security" onclick="showTab('cloud security')">
           <span class="icon">🛡️</span>
-          <h3>DDoS Protection</h3>
-          <p>Understand attack types and how modern networks defend against volumetric threats.</p>
+          <h3>Cloud Security</h3>
+          <p>Understand attack types and how to defend against security threats.</p>
           <div class="arrow">Read article →</div>
         </div>
       </div>
@@ -622,7 +622,7 @@
         <li><strong>Traffic flow</strong> — DNS, ICMP, TCP handshakes</li>
         <li><strong>Cloud architecture</strong> — data centers, virtualization</li>
         <li><strong>Security basics</strong> — firewalls, IDS/IPS, TLS</li>
-        <li><strong>DDoS fundamentals</strong> — attack types and mitigation</li>
+        <li><strong>DDoS </strong> — attack types and mitigation</li>
       </ul>
     </section>
 
@@ -634,7 +634,7 @@
       <ul>
         <li><strong>Network Architecture</strong> — Private and Public cloud environments for enterprise customers</li>
         <li><strong>Cloud Infrastructure Design</strong> — AWS, Azure, and Oracle Cloud Infrastructure (OCI)</li>
-        <li><strong>Network Automation &amp; IaC</strong> — Terraform, Python Libraries, REST APIs, and Cilium</li>
+        <li><strong>Network Automation &amp; IaC</strong> — Terraform Basics, K8 Cilium</li>
       </ul>
       <p class="muted">
         I currently lead Cloud Network &amp; Security for a large bank, managing a large-scale multi-cloud environment. Before this, I spent 16 years with GBM, IBM's representative office in the Middle East.
@@ -904,7 +904,7 @@ For a single TCP interaction:
           <h3>Layer 7 Load Testing</h3>
           <p class="muted">Simulate real users and APIs to validate WAF, caching, rate-limiting, and autoscaling.</p>
           <ul class="tool-list">
-            <li><span class="tool">ab</span> Apache BenchMark Basic concurrency</li>
+            <li><span class="tool">ab</span> Apache BenchMark ab -n 5000 -c 200 -v 2 https:</li>
             <li><span class="tool">k6</span> Scripted HTTP tests</li>
             <li><span class="tool">JMeter</span> API workflows</li>
             <li><span class="tool">Locust</span> User behaviour</li>
