@@ -331,7 +331,7 @@
       border-radius: inherit;
     }
 
-    .topic-card.packet::before { background: radial-gradient(ellipse at top left, rgba(255,255,255,.07), transparent 70%); }
+    .topic-card.cloud networking ::before { background: radial-gradient(ellipse at top left, rgba(255,255,255,.07), transparent 70%); }
     .topic-card.ddos::before { background: radial-gradient(ellipse at top left, rgba(255,255,255,.06), transparent 70%); }
 
     .topic-card:hover {
@@ -557,7 +557,7 @@
     </a>
     <nav class="tab-nav">
       <button class="tab-btn active" onclick="showTab('home')" id="tab-home">Home</button>
-      <button class="tab-btn" onclick="showTab('packet')" id="tab-packet">📦 Cloud Networkingy</button>
+      <button class="tab-btn" onclick="showTab('cloud networking')" id="tab-cloud networking">📦 Cloud Networkingy</button>
       <button class="tab-btn" onclick="showTab('ddos')" id="tab-ddos">🛡️ Cloud Security</button>
       <button class="tab-btn" onclick="showTab('blog')" id="tab-blog">📝 Blog</button>
     </nav>
@@ -1589,8 +1589,8 @@
   <span>© 2026 cloudnetworking.ai · Security &amp; Cloud Engineering</span>
   <div class="footer-links">
     <a href="#" onclick="showTab('home'); return false;">Home</a>
-    <a href="#" onclick="showTab('packet'); return false;">Packet Journey</a>
-    <a href="#" onclick="showTab('ddos'); return false;">DDoS</a>
+    <a href="#" onclick="showTab('networking'); return false;">Networking</a>
+    <a href="#" onclick="showTab('security'); return false;">Security</a>
     <a href="#" onclick="showTab('blog'); return false;">Blog</a>
     <a href="#about" onclick="showTab('home'); setTimeout(()=>document.getElementById('about').scrollIntoView({behavior:'smooth'}),100); return false;">About</a>
   </div>
