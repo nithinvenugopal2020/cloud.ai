@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>cloudnetworking.ai – Cloud Networking &amp; Security</title>
+  <meta name="description" content="Beginner-friendly cloud networking and security: OSI, TCP/IP, routing, DNS, data centers, cloud architecture, AWS security, and DDoS basics." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0b1d2b;
+      --panel:#0e2233;
+      --text:#ffffff;
+      --muted:#8b9db0;
+      --brand:#e2e8f0;
+      --brand2:#94a3b8;
+      --accent:#cbd5e1;
+      --line:rgba(255,255,255,.10);
+      --radius:16px;
+      --shadow: 0 12px 40px rgba(0,0,0,.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { overflow-x: hidden; }
+
+    body{
+      margin:0;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: linear-gradient(160deg, #0d2436 0%, #0b1d2b 40%, #091a27 100%);
+      min-height: 100vh;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* Animated grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -40%;
+      left: -10%;
+      width: 70%;
+      height: 70%;
+      background: radial-gradient(ellipse, rgba(255,255,255,.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    a{ color: var(--brand); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    /* ─── HEADER ─── */
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11,29,43,.96);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .header-inner{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -.3px;
+      white-space: nowrap;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .logo-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--brand);
+      box-shadow: 0 0 16px rgba(255,255,255,.5), 0 0 32px rgba(255,255,255,.2);
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 10px var(--brand), 0 0 20px rgba(255,255,255,.25); }
+      50% { box-shadow: 0 0 20px var(--brand), 0 0 50px rgba(255,255,255,.3); }
+    }
+
+    /* ─── TAB NAV ─── */
+    .tab-nav {
+      display: flex;
+      gap: 4px;
+      margin-left: auto;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: none;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.05);
+      border-color: var(--line);
+    }
+
+    .tab-btn.active {
+      color: var(--brand);
+      background: rgba(255,255,255,.07);
+      border-color: rgba(255,255,255,.25);
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    main { padding: 32px 0 60px; }
+
+    /* ─── TAB PANELS ─── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ─── HOME PAGE ─── */
+    .hero{
+      background: linear-gradient(135deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,.03) 50%, rgba(255,255,255,.03) 100%);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 20px;
+      padding: 48px 36px;
+      margin-top: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: 'CLOUD\ANETWORK';
+      white-space: pre;
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Space Mono', monospace;
+      font-size: 120px;
+      font-weight: 700;
+      line-height: 1;
+      color: rgba(255,255,255,.03);
+      pointer-events: none;
+      letter-spacing: -6px;
+    }
+
+    .hero h1{
+      margin: 0 0 14px;
+      font-size: 42px;
+      line-height: 1.1;
+      color: #ffffff;
+      font-weight: 900;
+      max-width: 700px;
+    }
+
+    .hero p{
+      margin: 0 0 24px;
+      color: var(--muted);
+      max-width: 620px;
+      font-size: 16px;
+    }
+
+    .cta-row{
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: var(--brand);
+      color: #0b1d2b;
+      font-weight: 900;
+      font-size: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      transition: all .2s ease;
+    }
+
+    .cta-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255,255,255,.25);
+      text-decoration: none;
+      color: #0b1d2b;
+    }
+
+    .cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all .2s ease;
+    }
+
+    .cta-secondary:hover {
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.2);
+      transform: translateY(-2px);
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .pill-row{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .pill{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius: 999px;
+      padding: 5px 12px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 12px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .card{
+      background: rgba(255,255,255,.02);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 16px;
+      transition: border-color .2s;
+    }
+
+    .card:hover { border-color: rgba(255,255,255,.10); }
+
+    .card h2{
+      margin: 0 0 12px;
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .card h3 {
+      color: #ffffff;
+      margin: 16px 0 8px;
+      font-size: 16px;
+    }
+
+    .muted{ color: var(--muted); }
+
+    ul{ padding-left: 20px; margin: 8px 0; }
+    li{ margin: 8px 0; color: var(--muted); }
+    li strong{ color: var(--text); }
+
+    /* Clickable topic cards */
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .topic-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      background: rgba(255,255,255,.02);
+      cursor: pointer;
+      transition: all .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topic-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity .2s;
+      border-radius: inherit;
+    }
+
+    .topic-card.packet::before { background: radial-gradient(ellipse at top left, rgba(255,255,255,.07), transparent 70%); }
+    .topic-card.ddos::before { background: radial-gradient(ellipse at top left, rgba(255,255,255,.06), transparent 70%); }
+
+    .topic-card:hover {
+      border-color: rgba(255,255,255,.25);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.4);
+    }
+
+    .topic-card:hover::before { opacity: 1; }
+
+    .topic-card .icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .topic-card h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .topic-card p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .topic-card .arrow {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--brand);
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .stat {
+      flex: 1;
+      min-width: 120px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      background: rgba(255,255,255,.02);
+      text-align: center;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 22px;
+      font-family: 'Space Mono', monospace;
+      color: var(--brand);
+      margin-bottom: 4px;
+    }
+
+    .stat span { font-size: 12px; color: var(--muted); }
+
+    /* ─── PACKET JOURNEY PAGE ─── */
+    .page-hero {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-top: 24px;
+      background: linear-gradient(135deg, rgba(255,255,255,.05), transparent);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-hero .reading-time {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    code{
+      background: rgba(255,255,255,.06);
+      padding: 3px 8px;
+      border-radius: 6px;
+      color: var(--brand);
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+    }
+
+    /* ─── DDOS PAGE ─── */
+    .ddos-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    @media(min-width: 800px){
+      .ddos-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .tool-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 12px;
+    }
+
+    .tool-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+      color: var(--muted);
+    }
+
+    .tool {
+      min-width: 110px;
+      text-align: center;
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.05);
+      color: var(--brand);
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+    }
+
+    .callout {
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .ddos-stat-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      justify-content: center;
+    }
+
+    .ddos-stat {
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding: 14px 20px;
+      min-width: 140px;
+      background: rgba(255,255,255,.04);
+      text-align: center;
+    }
+
+    .ddos-stat b {
+      display: block;
+      font-size: 20px;
+      font-family: 'Space Mono', monospace;
+      color: var(--brand);
+      margin-bottom: 4px;
+    }
+
+    .ddos-stat span { font-size: 12px; color: var(--muted); }
+
+    /* ─── ABOUT ─── */
+    .connect-links { list-style: none; padding: 0; }
+    .connect-links li { margin: 8px 0; }
+    .connect-links a { color: var(--brand); }
+
+    /* ─── FOOTER ─── */
+    footer{
+      margin-top: 40px;
+      padding: 20px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a { color: var(--muted); font-size: 13px; }
+    .footer-links a:hover { color: var(--brand); text-decoration: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width: 680px){
+      .hero h1 { font-size: 28px; }
+      .hero { padding: 28px 20px; }
+      .header-inner { gap: 12px; }
+      .tab-btn { padding: 6px 10px; font-size: 13px; }
+      .logo span { display: none; }
+    }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-in {
+      animation: fadeIn .4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#" onclick="showTab('home'); return false;">
+      <span class="logo-dot"></span>
+      <span>cloudnetworking.ai</span>
+    </a>
+    <nav class="tab-nav">
+      <button class="tab-btn active" onclick="showTab('home')" id="tab-home">Home</button>
+      <button class="tab-btn" onclick="showTab('packet')" id="tab-packet">📦 Packet Journey</button>
+      <button class="tab-btn" onclick="showTab('ddos')" id="tab-ddos">🛡️ DDoS</button>
+      <button class="tab-btn" onclick="showTab('blog')" id="tab-blog">📝 Blog</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+<main>
+
+  <!-- ═══════════════ HOME TAB ═══════════════ -->
+  <div class="tab-panel active" id="panel-home">
+
+    <section class="hero">
+      <h1>Cloud Networking &amp; Security Made Clear</h1>
+      <p>
+        Beginner-friendly explanations, diagrams, and step-by-step notes on networking,
+        cloud architecture, traffic flow, and security fundamentals — focused on clarity,
+        not vendor marketing.
+      </p>
+      <div class="cta-row">
+        <button class="cta-primary" onclick="showTab('packet')">🚀 Start with Packet Journey</button>
+        <button class="cta-secondary" onclick="showTab('ddos')">🛡️ Explore DDoS Basics</button>
+      </div>
+      <div class="pill-row">
+        <span class="pill">Beginner-friendly</span>
+        <span class="pill">Diagrams first</span>
+        <span class="pill">No jargon</span>
+        <span class="pill">Concepts before tools</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Our Mission</h2>
+      <p class="muted">
+        Free, foundational education in cloud networking and security — for anyone, anywhere. 
+        We believe clarity makes learning accessible to everyone.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Explore Topics</h2>
+      <div class="topic-grid">
+        <div class="topic-card packet" onclick="showTab('packet')">
+          <span class="icon">📦</span>
+          <h3>A Packet Journey</h3>
+          <p>From 0s and 1s to the cloud — follow data across every layer of the network stack.</p>
+          <div class="arrow">Read article →</div>
+        </div>
+        <div class="topic-card ddos" onclick="showTab('ddos')">
+          <span class="icon">🛡️</span>
+          <h3>DDoS Protection</h3>
+          <p>Understand attack types and how modern networks defend against volumetric threats.</p>
+          <div class="arrow">Read article →</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>What You Will Learn</h2>
+      <ul>
+        <li><strong>Networking fundamentals</strong> — OSI, TCP/IP, routing</li>
+        <li><strong>Traffic flow</strong> — DNS, ICMP, TCP handshakes</li>
+        <li><strong>Cloud architecture</strong> — data centers, virtualization</li>
+        <li><strong>Security basics</strong> — firewalls, IDS/IPS, TLS</li>
+        <li><strong>DDoS fundamentals</strong> — attack types and mitigation</li>
+      </ul>
+    </section>
+
+    <section class="card" id="about">
+      <h2>About Me</h2>
+      <p class="muted">
+        I bring <strong>over two decades of experience in networking and security</strong>, and I continue to expand and share my knowledge through research and blogging, with a strong focus on clarity and practical understanding.
+      </p>
+      <ul>
+        <li><strong>Network Architecture</strong> — Private and Public cloud environments for enterprise customers</li>
+        <li><strong>Cloud Infrastructure Design</strong> — AWS, Azure, and Oracle Cloud Infrastructure (OCI)</li>
+        <li><strong>Network Automation &amp; IaC</strong> — Terraform, Python Libraries, REST APIs, and Cilium</li>
+      </ul>
+      <p class="muted">
+        I currently lead Cloud Network &amp; Security for a large bank, managing a large-scale multi-cloud environment. Before this, I spent 16 years with GBM, IBM's representative office in the Middle East.
+      </p>
+      <p class="muted">
+        I strongly believe that <strong>anyone with curiosity, consistency, and a willingness to learn can reach meaningful levels in their career</strong>. The journey matters more than speed, and clarity makes learning accessible to everyone.
+      </p>
+      <h3>Connect</h3>
+      <ul class="connect-links">
+        <li>🔗 LinkedIn: <a href="https://www.linkedin.com/in/nithinvenugopal/" target="_blank" rel="noopener">linkedin.com/in/nithinvenugopal</a></li>
+        <li>🌐 Blog: <a href="https://cloudnetworking.ai" target="_blank" rel="noopener">cloudnetworking.ai</a></li>
+        <li>💻 GitHub: <a href="https://github.com/nithinvenugopal2020" target="_blank" rel="noopener">github.com/nithinvenugopal2020</a></li>
+      </ul>
+    </section>
+
+  </div>
+
+  <!-- ═══════════════ PACKET JOURNEY TAB ═══════════════ -->
+  <div class="tab-panel" id="panel-packet">
+
+    <section class="page-hero">
+      <h1 style="color:#ffffff; margin:0 0 10px; font-size:34px; font-weight:900;">A Packet Journey</h1>
+      <p class="muted" style="margin:0 0 8px;">From Your Computer to the Cloud</p>
+      <div class="reading-time">📖 Reading time: ~15 mins · Networking 101</div>
+    </section>
+
+    <section class="card">
+      <h2>The Binary World: 0s and 1s</h2>
+      <p class="muted">
+        Have you ever wondered how data from your computer actually moves across the internet and ends up in the cloud? Let's start from the very basics.
+      </p>
+      <p class="muted">
+        Computers operate using the <strong>binary number system</strong>, which has only two digits: 0 and 1. This is different from the decimal system, which has ten digits (0–9).
+      </p>
+      <p class="muted">
+        Example: To convert 13 into binary:<br>
+        13 = 8 + 4 + 1 = 2³ + 2² + 2⁰<br>
+        Binary representation: <code>1101</code>
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>How Are 0s and 1s Created?</h2>
+      <p class="muted">
+        At the lowest level, computers use <strong>transistors</strong>. A transistor can either be On (1) or Off (0).
+      </p>
+      <p class="muted">
+        Imagine memory as billions of tiny switches. Each switch is called a <strong>bit</strong>, and eight bits together form a <strong>byte</strong>.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>How Does the Computer Understand Them?</h2>
+      <ul class="muted">
+        <li>Hardware layer</li>
+        <li>Kernel and device driver layer</li>
+        <li>Operating system layer</li>
+        <li>Application layer</li>
+      </ul>
+      <p class="muted">When you save a file, the application informs the OS, which uses drivers to write data to the hard drive.</p>
+    </section>
+
+    <section class="card">
+      <h2>Encoding of Data</h2>
+      <p class="muted">
+        Every character is encoded for efficient storage and transmission using formats like ASCII or UTF (Unicode).
+      </p>
+      <p class="muted">Example: The word <strong>network</strong> uses 7 characters → file size is 7 bytes.</p>
+    </section>
+
+    <section class="card">
+      <h2>MAC vs IP Address</h2>
+      <p class="muted">
+        At the software level, systems care about IP addresses. At the local network level, devices use MAC addresses.
+      </p>
+      <p class="muted">
+        MAC addresses are 48-bit (6 octets) identifiers defined by IEEE 802.3 and never leave the local network.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>OSI Layers and Packet Formation</h2>
+      <ul class="muted">
+        <li><strong>Transport</strong> → Segment</li>
+        <li><strong>Network</strong> → Packet</li>
+        <li><strong>Data Link</strong> → Frame</li>
+        <li><strong>Physical</strong> → Bits</li>
+      </ul>
+      <p class="muted">Each layer adds its own header. At the destination, headers are removed in reverse order.</p>
+    </section>
+
+    <section class="card">
+      <h2>Network Media</h2>
+      <ul class="muted">
+        <li><strong>Ethernet</strong>: electrical pulses over copper or fiber</li>
+        <li><strong>Fiber</strong>: light pulses over glass</li>
+        <li><strong>Wireless</strong>: radio waves (WiFi)</li>
+        <li><strong>PAN</strong>: Bluetooth</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Network Topologies</h2>
+      <ul class="muted">
+        <li>Bus</li>
+        <li>Ring</li>
+        <li><strong>Star</strong> (most common)</li>
+        <li>Mesh</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Speed, Bandwidth, Latency &amp; Throughput</h2>
+      <p class="muted"><strong>Bandwidth:</strong> Maximum data capacity (bps).</p>
+      <p class="muted"><strong>Latency:</strong> Time taken for a packet to travel (ms).</p>
+      <p class="muted"><strong>Throughput:</strong> Actual successful data rate.</p>
+      <p class="muted"><strong>Speed:</strong> Physical signal rate of the medium.</p>
+    </section>
+
+    <section class="card">
+      <h2>Real-Life Example</h2>
+      <p class="muted">
+        A 1 Gbps connection = 1024 Mbps = 128 MB/s.<br>
+        A 1 GB file can be downloaded in about 8 seconds.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>The Journey Ends in the Cloud ☁️</h2>
+      <p class="muted">
+        The data you're reading travelled from a VS Code editor, across multiple networks, and reached you via the cloud.
+      </p>
+    </section>
+
+  </div>
+
+  <!-- ═══════════════ DDOS TAB ═══════════════ -->
+  <div class="tab-panel" id="panel-ddos">
+
+    <section class="page-hero" style="background: linear-gradient(135deg, rgba(255,255,255,.05), transparent);">
+      <h1 style="color:#ffffff; margin:0 0 10px; font-size:34px; font-weight:900;">Defending Against DDoS Attacks</h1>
+      <p class="muted" style="margin:0;">How modern networks protect applications from volumetric, protocol, and application-layer attacks.</p>
+      <div class="ddos-stat-row">
+        <div class="ddos-stat"><b>10+ Tbps</b><span>Edge Capacity</span></div>
+        <div class="ddos-stat"><b>3 Layers</b><span>L3 / L4 / L7</span></div>
+        <div class="ddos-stat"><b>24×7</b><span>Automated Mitigation</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 style="color:#ffffff;">What is a DDoS Attack?</h2>
+      <p class="muted">
+        A Distributed Denial of Service (DDoS) attack is an attempt to make an online service unavailable by overwhelming it with traffic from multiple sources.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2 style="color:#ffffff;">Testing &amp; Resilience Validation</h2>
+
+      <div class="ddos-grid">
+        <div>
+          <h3>L3 / L4 Lab Tools</h3>
+          <p class="muted">Use only in environments you own or are authorised to test. Focus on behaviour validation and capacity planning.</p>
+          <ul class="tool-list">
+            <li><span class="tool">hping3</span> Protocol behaviour testing</li>
+            <li><span class="tool">iperf3</span> Throughput baseline</li>
+            <li><span class="tool">tcpdump</span> Packet inspection</li>
+          </ul>
+          <div class="callout">
+            Measure: SYN backlog, drops, conntrack usage, edge rate-limits.
+          </div>
+        </div>
+
+        <div>
+          <h3>Layer 7 Load Testing</h3>
+          <p class="muted">Simulate real users and APIs to validate WAF, caching, rate-limiting, and autoscaling.</p>
+          <ul class="tool-list">
+            <li><span class="tool">k6</span> Scripted HTTP tests</li>
+            <li><span class="tool">JMeter</span> API workflows</li>
+            <li><span class="tool">Locust</span> User behaviour</li>
+            <li><span class="tool">Gatling</span> High-performance load</li>
+            <li><span class="tool">ab</span> Basic concurrency</li>
+          </ul>
+          <div class="callout">
+            Measure: p95 latency, error rate, WAF challenges, cache hit ratio, scale-up time.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 style="color:#ffffff;">The Goal of DDoS Protection</h2>
+      <p class="muted">
+        The objective is not just to block traffic, but to ensure legitimate users always get through while attacks are absorbed at the network edge.
+      </p>
+    </section>
+
+  </div>
+
+  <!-- ═══════════════ BLOG TAB ═══════════════ -->
+  <div class="tab-panel" id="panel-blog">
+
+    <section class="page-hero">
+      <h1 style="color:#ffffff; margin:0 0 10px; font-size:34px; font-weight:900;">Blog</h1>
+      <p class="muted" style="margin:0;">Thoughts, guides and deep-dives on cloud networking and security.</p>
+    </section>
+
+    <!-- ✏️ ADD YOUR BLOG POST CARDS BELOW — copy this block for each post -->
+
+    <section class="card" style="cursor:pointer;">
+      <p class="muted" style="font-size:12px; margin:0 0 8px;">Month Year · X min read</p>
+      <h2>Your Post Title Here</h2>
+      <p class="muted">Write a short 2–3 sentence summary of your post here. Give readers enough to know what they'll learn.</p>
+      <span style="font-size:13px; color:var(--brand); font-weight:700;">Read more →</span>
+    </section>
+
+    <!-- ✏️ END OF BLOG POST BLOCK -->
+
+  </div>
+
+</main>
+
+<footer>
+  <span>© 2025 cloudnetworking.ai · Security &amp; Cloud Engineering</span>
+  <div class="footer-links">
+    <a href="#" onclick="showTab('home'); return false;">Home</a>
+    <a href="#" onclick="showTab('packet'); return false;">Packet Journey</a>
+    <a href="#" onclick="showTab('ddos'); return false;">DDoS</a>
+    <a href="#" onclick="showTab('blog'); return false;">Blog</a>
+    <a href="#about" onclick="showTab('home'); setTimeout(()=>document.getElementById('about').scrollIntoView({behavior:'smooth'}),100); return false;">About</a>
+  </div>
+</footer>
+</div>
+
+<script>
+  function showTab(name) {
+    // Update buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+
+    // Update panels
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById('panel-' + name);
+    panel.classList.add('active');
+    panel.classList.remove('fade-in');
+    void panel.offsetWidth; // reflow
+    panel.classList.add('fade-in');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
