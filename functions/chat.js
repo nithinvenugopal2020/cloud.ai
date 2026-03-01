@@ -79,6 +79,8 @@ export async function onRequestPost({ request, env }) {
   ];
 
   // ── Call OpenAI ──
+  // cf object forces Cloudflare to route this request via a US data center
+  // which avoids the "country not supported" error from OpenAI
   let res;
   try {
     res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -93,6 +95,12 @@ export async function onRequestPost({ request, env }) {
         max_tokens: 600,
         temperature: 0.7,
       }),
+      cf: {
+        resolveOverride: "api.openai.com",
+        cacheTtl: 0,
+        cacheEverything: false,
+        country: "US",        // route via US Cloudflare edge node
+      },
     });
   } catch (err) {
     return respond({ error: "Failed to reach OpenAI: " + err.message }, 502);
