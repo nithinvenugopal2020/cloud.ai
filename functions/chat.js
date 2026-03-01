@@ -15,8 +15,8 @@ const MODEL       = "gpt-4o-mini";
 const DAILY_LIMIT = 5;
 const ACCOUNT_ID  = "2f60f2d3b1487567a2b0a7fcbab445cb";
 
-// AI Gateway URL — routes through Cloudflare US infrastructure
-const OPENAI_URL  = `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/openai-proxy/openai/chat/completions`;
+// AI Gateway URL — exact URL from your Cloudflare AI Gateway
+const OPENAI_URL  = `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/openai-proxy/compat/chat/completions`;
 
 const SYSTEM_PROMPT = `You are the AI assistant for cloudnetworking.ai — an educational site focused on cloud networking and security.
 
