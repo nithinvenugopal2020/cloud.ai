@@ -1334,7 +1334,7 @@ Transit Gateway
   <div id="chat-header">
     <div class="chat-header-dot"></div>
     <span>Ask cloudnetworking.ai</span>
-    <small>Powered by OpenAI</small>
+    <small id="chat-counter" style="margin-left:auto; font-size:11px; color:var(--muted);">5 of 5 left today</small>
   </div>
   <div id="chat-messages">
     <div class="chat-msg assistant">👋 Hi! Ask me anything about cloud networking, security, firewalls, or AWS architecture.</div>
@@ -1353,10 +1353,10 @@ Transit Gateway
   // ── Pages Function endpoint ──
   const WORKER_URL = '/chat';
 
-  // Keep conversation history in memory for the session
   let chatHistory = [];
   let isOpen    = false;
   let isLoading = false;
+  let remaining = 5; // shown in header, updated from server
 
   function toggleChat() {
     isOpen = !isOpen;
@@ -1368,10 +1368,22 @@ Transit Gateway
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   }
 
+  function updateCounter(n) {
+    remaining = n;
+    const el = document.getElementById('chat-counter');
+    if (el) el.textContent = `${n} of 5 left today`;
+    // disable input if limit hit
+    if (n <= 0) {
+      document.getElementById('chat-input').disabled = true;
+      document.getElementById('chat-send').disabled  = true;
+      document.getElementById('chat-input').placeholder = 'Daily limit reached. Come back tomorrow!';
+    }
+  }
+
   async function sendMessage() {
     const input = document.getElementById('chat-input');
     const text  = input.value.trim();
-    if (!text || isLoading) return;
+    if (!text || isLoading || remaining <= 0) return;
 
     input.value = '';
     input.style.height = 'auto';
@@ -1385,20 +1397,22 @@ Transit Gateway
       const res = await fetch(WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Send current message + prior history so AI remembers context
         body: JSON.stringify({ message: text, history: chatHistory })
       });
 
       const data = await res.json();
       typing.remove();
 
-      if (!res.ok || data.error) {
+      if (data.limitReached) {
+        appendError(data.error);
+        updateCounter(0);
+      } else if (!res.ok || data.error) {
         appendError(data.error || 'Something went wrong. Please try again.');
       } else {
-        // Save turn to history for next message
         chatHistory.push({ role: 'user',      content: text });
         chatHistory.push({ role: 'assistant', content: data.reply });
         appendMsg('assistant', data.reply);
+        if (typeof data.remaining === 'number') updateCounter(data.remaining);
       }
     } catch (err) {
       typing.remove();
@@ -1406,7 +1420,7 @@ Transit Gateway
     }
 
     isLoading = false;
-    document.getElementById('chat-send').disabled = false;
+    if (remaining > 0) document.getElementById('chat-send').disabled = false;
     input.focus();
   }
 
