@@ -274,6 +274,50 @@
 
     .fade-in{ animation:fadeIn .4s ease forwards; }
     @keyframes fadeIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+
+    /* SUB-TOPIC NAV */
+    .subtopic-nav{ display:flex; gap:8px; flex-wrap:wrap; margin:24px 0 0; }
+    .subtopic-btn{
+      padding:9px 18px; border:1px solid var(--line); border-radius:10px;
+      background:rgba(255,255,255,.03); color:var(--muted);
+      font-family:'DM Sans',sans-serif; font-size:13px; font-weight:700;
+      cursor:pointer; transition:all .2s;
+    }
+    .subtopic-btn:hover{ color:var(--text); background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.2); }
+    .subtopic-btn.active{ color:#fff; background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.3); }
+    .subtopic-panel{ display:none; }
+    .subtopic-panel.active{ display:block; }
+
+    /* AWS TGW STYLES */
+    .mapping-table{ width:100%; border-collapse:collapse; margin-top:14px; font-size:13px; }
+    .mapping-table th{ background:rgba(255,255,255,.06); color:var(--brand); font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.06em; padding:10px 14px; text-align:left; border-bottom:1px solid var(--line); }
+    .mapping-table td{ padding:10px 14px; border-bottom:1px solid rgba(255,255,255,.05); color:var(--muted); vertical-align:top; }
+    .mapping-table td:first-child{ color:var(--text); font-weight:700; font-family:'Space Mono',monospace; font-size:12px; }
+    .mapping-table tr:last-child td{ border-bottom:none; }
+    .mapping-table tr:hover td{ background:rgba(255,255,255,.02); }
+
+    .flow-steps{ display:flex; flex-direction:column; gap:0; margin-top:14px; }
+    .flow-step{ display:flex; gap:14px; align-items:flex-start; }
+    .flow-step-line{ display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
+    .flow-step-dot{ width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Space Mono',monospace; font-size:11px; font-weight:700; flex-shrink:0; background:rgba(99,179,237,.15); color:#63b3ed; border:1px solid rgba(99,179,237,.25); }
+    .flow-step-connector{ width:1px; height:24px; background:rgba(255,255,255,.1); margin: 2px auto; }
+    .flow-step-content{ padding-bottom:20px; }
+    .flow-step-content h4{ margin:4px 0 4px; font-size:14px; font-weight:800; color:#fff; }
+    .flow-step-content p{ margin:0; font-size:13px; color:var(--muted); line-height:1.6; }
+    .flow-step-content code{ background:rgba(255,255,255,.06); padding:2px 6px; border-radius:4px; font-family:'Space Mono',monospace; font-size:12px; color:var(--brand); }
+
+    .arch-diagram{ background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:12px; padding:20px 24px; margin-top:14px; font-family:'Space Mono',monospace; font-size:12px; color:var(--muted); line-height:2; white-space:pre; overflow-x:auto; }
+
+    .insight-box{ margin-top:14px; padding:14px 18px; border-radius:12px; border:1px solid rgba(99,179,237,.2); background:rgba(99,179,237,.05); }
+    .insight-box p{ margin:0; font-size:13px; color:var(--muted); }
+    .insight-box p strong{ color:#63b3ed; }
+
+    .diff-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+    @media(max-width:600px){ .diff-grid{ grid-template-columns:1fr; } }
+    .diff-card{ border:1px solid var(--line); border-radius:12px; padding:16px; background:rgba(255,255,255,.02); }
+    .diff-card h4{ margin:0 0 10px; font-size:13px; font-weight:800; color:#fff; font-family:'Space Mono',monospace; }
+    .diff-card ul{ padding-left:16px; margin:0; }
+    .diff-card li{ font-size:13px; color:var(--muted); margin:5px 0; }
   </style>
 </head>
 
@@ -347,10 +391,11 @@
     <section class="card">
       <h2>What You Will Learn</h2>
       <ul>
-        <li><strong>Cloud Networking </strong> — routing</li>
-        <li><strong>Cloud Traffic flow</strong> — DNS, TCP, Flow, Connection, Session</li>
-        <li><strong>Cloud Architecture</strong> — data centers, virtualization</li>
-        <li><strong>Cloud Security </strong> — firewalls, IDS/IPS, TLS, DDoS</li>
+        <li><strong>Networking fundamentals</strong> — OSI, TCP/IP, routing</li>
+        <li><strong>Traffic flow</strong> — DNS, ICMP, TCP handshakes</li>
+        <li><strong>Firewall concepts</strong> — Flow, Connection, Session</li>
+        <li><strong>Cloud architecture</strong> — data centers, virtualization</li>
+        <li><strong>Security basics</strong> — firewalls, IDS/IPS, TLS, DDoS</li>
       </ul>
     </section>
 
@@ -359,9 +404,8 @@
       <p class="muted">I bring <strong>over two decades of experience in networking and security</strong>, and I continue to share my knowledge through research and blogging, with a strong focus on clarity and practical understanding.</p>
       <ul>
         <li><strong>Network Architecture</strong> — Private and Public cloud environments for enterprise customers</li>
-        <li><strong> Security Expertise</strong> — PaloAlto, Fortinet, f5, Cisco, </li>
         <li><strong>Cloud Infrastructure Design</strong> — AWS, Azure, and Oracle Cloud Infrastructure (OCI)</li>
-        <li><strong>Network Automation &amp; IaC</strong> — Terraform, Kubernetes Netwokring  Cilium </li>
+        <li><strong>Network Automation &amp; IaC</strong> — Terraform, K8s Cilium</li>
       </ul>
       <p class="muted">I currently lead Cloud Network &amp; Security for a large bank, managing a large-scale multi-cloud environment. Before this, I spent 16 years with GBM, IBM's representative office in the Middle East.</p>
       <p class="muted">I strongly believe that <strong>anyone with curiosity, consistency, and a willingness to learn can reach meaningful levels in their career</strong>.</p>
@@ -380,8 +424,16 @@
 
     <section class="page-hero">
       <h1 style="color:#fff;margin:0 0 10px;font-size:34px;font-weight:900;">Cloud Networking</h1>
-      <p class="muted" style="margin:0;">Core concepts every network engineer must know — Flow, Connection, and Session.</p>
+      <p class="muted" style="margin:0;">Core networking concepts mapped to cloud — from firewall fundamentals to AWS routing architecture.</p>
     </section>
+
+    <div class="subtopic-nav">
+      <button class="subtopic-btn active" onclick="showSubtopic('tgw')" id="stab-tgw">☁️ AWS Transit Gateway</button>
+      <button class="subtopic-btn" onclick="showSubtopic('firewall')" id="stab-firewall">🔥 Flow, Connection &amp; Session</button>
+    </div>
+
+    <!-- FIREWALL SUB-TOPIC -->
+    <div class="subtopic-panel" id="spanel-firewall">
 
     <div class="summary-row">
       <div class="summary-card flow"><div class="num">01</div><h3>Flow</h3><p>One direction of traffic, defined by the 5-tuple. Two flows make a full conversation.</p></div>
@@ -490,7 +542,277 @@
       </div>
     </div>
 
-  </div>
+    </div><!-- end spanel-firewall -->
+
+    <!-- AWS TGW SUB-TOPIC -->
+    <div class="subtopic-panel active" id="spanel-tgw">
+
+      <!-- Intro -->
+      <section class="card" style="margin-top:24px;">
+        <h2>From Cisco VRF to AWS Transit Gateway</h2>
+        <p class="muted">AWS networking is not mysterious — it's just routing concepts implemented differently. This guide maps Cisco VRF, routing, and BGP fundamentals directly to AWS constructs so cloud routing makes intuitive sense.</p>
+      </section>
+
+      <!-- 1. Cisco Fundamentals -->
+      <section class="card">
+        <h2>1 — Revisiting Cisco Fundamentals</h2>
+        <h3>What Is a Router?</h3>
+        <p class="muted">A Cisco router maintains a routing table, performs destination-based forwarding, supports dynamic routing protocols (BGP, OSPF, EIGRP), has multiple interfaces, and can run multiple VRFs. At its core, routing is simple: <strong>match destination → lookup route → forward out interface</strong>. Everything else is control-plane sophistication.</p>
+        <h3>What Is a VRF?</h3>
+        <p class="muted">A VRF (Virtual Routing and Forwarding) is a separate routing table inside the same router. Each VRF has isolated routes, can reuse overlapping IP ranges, has dedicated interfaces, and does not see other VRFs unless you explicitly leak routes.</p>
+        <div class="insight-box">
+          <p>Think of a VRF as <strong>a virtual router inside a physical router</strong>. This is the key to understanding AWS Transit Gateway.</p>
+        </div>
+        <table class="mapping-table" style="margin-top:14px;">
+          <thead><tr><th>VRF Example</th><th>Address Space</th><th>Isolation</th></tr></thead>
+          <tbody>
+            <tr><td>VRF-PROD</td><td>10.0.0.0/16</td><td>Fully isolated</td></tr>
+            <tr><td>VRF-DEV</td><td>10.0.0.0/16</td><td>Same range — no conflict</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 2. VPC Router -->
+      <section class="card">
+        <h2>2 — The VPC Router</h2>
+        <p class="muted">Every VPC in AWS has an internal router. You never see it, but it exists. It routes traffic between subnets and forwards to Internet Gateway, NAT Gateway, VPC Peering, or Transit Gateway. But it is very basic.</p>
+        <div class="diff-grid">
+          <div class="diff-card">
+            <h4>🔹 VPC Router — Can</h4>
+            <ul>
+              <li>Route between subnets in one VPC</li>
+              <li>Forward to IGW, NAT-GW, TGW</li>
+              <li>Use static route tables</li>
+            </ul>
+          </div>
+          <div class="diff-card">
+            <h4>🔹 VPC Router — Cannot</h4>
+            <ul>
+              <li>Connect VPCs together</li>
+              <li>Run BGP</li>
+              <li>Support VRFs</li>
+              <li>Perform dynamic routing</li>
+              <li>Do NAT or firewalling</li>
+            </ul>
+          </div>
+        </div>
+        <div class="insight-box">
+          <p>Think of the VPC Router as <strong>a simple internal L3 gateway for one VPC only</strong>. It is not the cloud equivalent of a Cisco ISR or ASR.</p>
+        </div>
+      </section>
+
+      <!-- 3. Transit Gateway -->
+      <section class="card">
+        <h2>3 — What Is AWS Transit Gateway?</h2>
+        <p class="muted">Transit Gateway is a <strong>managed Layer 3 routing device that supports multiple routing domains</strong>. This is where Cisco engineers should think: <strong>TGW route tables = VRFs</strong>.</p>
+        <div class="diff-grid">
+          <div class="diff-card">
+            <h4>🔷 Transit Gateway</h4>
+            <ul>
+              <li>Connects many VPCs</li>
+              <li>Connects VPN &amp; Direct Connect</li>
+              <li>Connects SD-WAN</li>
+              <li>Multiple route tables (like VRFs)</li>
+              <li>Supports BGP via DX/VPN attachments</li>
+              <li>Centralized routing control</li>
+            </ul>
+          </div>
+          <div class="diff-card">
+            <h4>🔷 TGW Architecture</h4>
+            <div class="arch-diagram" style="margin:0;font-size:11px;">┌───────────────────┐
+│  Transit Gateway  │
+│                   │
+│  Route Table A ───┼── VRF-A
+│  Route Table B ───┼── VRF-B
+│  Route Table C ───┼── VRF-C
+└────────┬──────────┘
+    ┌────┼────┐
+  VPC1  VPC2  VPN</div>
+          </div>
+        </div>
+        <div class="insight-box">
+          <p>Think of TGW as: <strong>a large AWS-managed core router with multiple VRFs, dynamic routing at the edge, but no firewall, no NAT, no inspection.</strong></p>
+        </div>
+      </section>
+
+      <!-- 4. Concept Mapping -->
+      <section class="card">
+        <h2>4 — Cisco → AWS Concept Mapping</h2>
+        <p class="muted">Once you internalize this table, AWS networking becomes logical.</p>
+        <table class="mapping-table">
+          <thead>
+            <tr><th>Cisco Concept</th><th>AWS Equivalent</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Router</td><td>Transit Gateway</td><td>Managed Layer 3 routing device</td></tr>
+            <tr><td>Interface</td><td>TGW Attachment</td><td>VPC, VPN, or DX connection</td></tr>
+            <tr><td>VRF</td><td>TGW Route Table</td><td>Isolated routing domain</td></tr>
+            <tr><td>Assign interface to VRF</td><td>Association</td><td>Attachment → Route Table</td></tr>
+            <tr><td>Route leaking</td><td>Propagation</td><td>Share routes between tables</td></tr>
+            <tr><td>BGP neighbor</td><td>Direct Connect / VPN edge</td><td>BGP at attachment edge only</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top:12px; font-size:13px;">Each attachment (VPC, VPN, Direct Connect) behaves like an <strong>interface on a router</strong>.</p>
+      </section>
+
+      <!-- 5. Traffic Flow VPC-A to VPC-B -->
+      <section class="card">
+        <h2>5 — How Traffic Flows Inside TGW</h2>
+        <p class="muted" style="margin:0 0 16px;">Example: VPC-A <code>10.1.0.0/16</code> → VPC-B <code>10.2.0.0/16</code>, both attached to TGW.</p>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">1</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content">
+              <h4>EC2 in VPC-A sends traffic</h4>
+              <p>VPC-A route table says: <code>10.2.0.0/16 → TGW</code>. Packet is forwarded to the TGW attachment ENI.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">2</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content">
+              <h4>Packet enters TGW</h4>
+              <p>TGW receives the packet on the VPC-A attachment. Each attachment is <strong>associated with a specific TGW route table</strong> — like assigning an interface to a VRF.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">3</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content">
+              <h4>TGW route lookup</h4>
+              <p>TGW route table contains: <code>10.2.0.0/16 → VPC-B attachment</code>. TGW selects the correct attachment.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">4</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content">
+              <h4>Packet forwarded to VPC-B</h4>
+              <p>TGW forwards packet to VPC-B attachment.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">5</div></div>
+            <div class="flow-step-content">
+              <h4>VPC-B delivers to EC2</h4>
+              <p>VPC-B route table delivers the packet to the destination EC2 instance.</p>
+            </div>
+          </div>
+        </div>
+        <div class="insight-box">
+          <p>TGW is <strong>stateless</strong> — no session table, no NAT, no inspection. Pure <strong>Layer 3 destination-based forwarding</strong>. Just like a router.</p>
+        </div>
+      </section>
+
+      <!-- 6. Direct Connect + BGP -->
+      <section class="card">
+        <h2>6 — TGW with Direct Connect &amp; BGP</h2>
+        <p class="muted" style="margin:0 0 16px;">Connecting on-premises networks to AWS via Direct Connect and BGP.</p>
+        <div class="arch-diagram">On-Prem Router
+      │
+      │  BGP
+      ▼
+Direct Connect
+      ▼
+  DX Gateway
+      ▼
+Transit Gateway
+   ┌──┴──┐
+ VPC-A  VPC-B</div>
+        <div class="flow-steps" style="margin-top:20px;">
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">1</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content">
+              <h4>BGP at the Edge</h4>
+              <p>Your Cisco router establishes a BGP session over Direct Connect. You advertise <code>10.0.0.0/16</code> — AWS learns this route.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">2</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content">
+              <h4>DX Gateway association</h4>
+              <p>DX Gateway associates with Transit Gateway. TGW installs: <code>10.0.0.0/16 → DX attachment</code>.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">3</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content">
+              <h4>TGW route table populated</h4>
+              <p><code>10.0.0.0/16 → DX attachment</code><br><code>10.1.0.0/16 → VPC-A attachment</code><br><code>10.2.0.0/16 → VPC-B attachment</code></p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">4</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content">
+              <h4>EC2 to On-Prem</h4>
+              <p><code>EC2 → TGW → DX Gateway → Direct Connect → On-prem router</code></p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">5</div></div>
+            <div class="flow-step-content">
+              <h4>Return traffic</h4>
+              <p><code>On-prem → Direct Connect → DX Gateway → TGW → correct VPC</code></p>
+            </div>
+          </div>
+        </div>
+        <div class="insight-box">
+          <p><strong>TGW does NOT run BGP internally.</strong> BGP happens at the DX/VPN attachment edge. TGW simply installs learned routes — it is the <strong>forwarding plane, not the control-plane engine</strong>.</p>
+        </div>
+      </section>
+
+      <!-- 7. TGW vs Cisco ISR/ASR -->
+      <section class="card">
+        <h2>7 — TGW vs Cisco ISR / ASR</h2>
+        <table class="mapping-table">
+          <thead>
+            <tr><th>Feature</th><th>Transit Gateway</th><th>Cisco ISR / ASR</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Layer 3 routing</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>Multiple routing domains</td><td>✅ Route Tables (VRF-like)</td><td>✅ Full VRFs</td></tr>
+            <tr><td>ECMP support</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>BGP</td><td>⚠️ Edge only (DX/VPN)</td><td>✅ Full control</td></tr>
+            <tr><td>OSPF / EIGRP</td><td>❌ No</td><td>✅ Yes</td></tr>
+            <tr><td>NAT</td><td>❌ No</td><td>✅ Yes</td></tr>
+            <tr><td>Stateful inspection</td><td>❌ No</td><td>⚠️ Optional</td></tr>
+            <tr><td>Hardware visibility</td><td>❌ Managed / hidden</td><td>✅ Yes</td></tr>
+          </tbody>
+        </table>
+        <div class="diff-grid" style="margin-top:14px;">
+          <div class="diff-card">
+            <h4>Transit Gateway is…</h4>
+            <ul><li>A managed cloud core router</li><li>AWS owns the control plane</li><li>No direct hardware access</li></ul>
+          </div>
+          <div class="diff-card">
+            <h4>Cisco ISR/ASR is…</h4>
+            <ul><li>A fully controllable enterprise router</li><li>You own the control plane</li><li>Full protocol stack</li></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Complete Mental Model -->
+      <section class="card">
+        <h2>8 — The Complete Mental Model</h2>
+        <table class="mapping-table">
+          <thead>
+            <tr><th>AWS Component</th><th>Think of it as</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>VPC Router</td><td>Basic internal L3 gateway for one VPC only</td></tr>
+            <tr><td>Transit Gateway</td><td>Cloud core router</td></tr>
+            <tr><td>TGW Route Table</td><td>VRF</td></tr>
+            <tr><td>TGW Attachment</td><td>Router interface</td></tr>
+            <tr><td>Association</td><td>Assign interface to VRF</td></tr>
+            <tr><td>Route Propagation</td><td>Route leaking between VRFs</td></tr>
+            <tr><td>Direct Connect / VPN</td><td>BGP edge peer</td></tr>
+          </tbody>
+        </table>
+        <div class="insight-box" style="margin-top:16px;">
+          <p>For network engineers transitioning to AWS — the key is not learning new theory, it's <strong>translating familiar concepts</strong>. Cloud routing is still routing. The difference is control: in Cisco, you own the control plane. In AWS, AWS owns the control plane. But the fundamentals remain: <strong>destination lookup → next-hop selection → forwarding</strong>. And that's something every network engineer already understands.</p>
+        </div>
+      </section>
+
+    </div><!-- end spanel-tgw -->
+
+  </div><!-- end panel-networking -->
 
   <!-- ═══ CLOUD SECURITY — DDoS ═══ -->
   <div class="tab-panel" id="panel-security">
@@ -560,6 +882,11 @@
       <div class="read-more">Read more →</div>
     </div>
 
+    <a href="flow-connection-session.html" class="blog-card">
+      <div class="meta">Feb 2026 · 5 min read · Firewall Concepts</div>
+      <h2>Flow, Connection, and Sessions in Firewalls</h2>
+      <p>A flow is unidirectional, a connection is bidirectional, and a session is the firewall's state record. Three terms — clearly explained.</p>
+      <div class="read-more">Read more →</div>
     </a>
 
     <!-- ✏️ ADD MORE BLOG POST CARDS HERE -->
@@ -621,8 +948,6 @@
         <li><strong>Physical</strong> → Bits</li>
       </ul>
       <p class="muted">Each layer adds its own header. At the destination, headers are removed in reverse order.</p>
-      <p class="muted"> Good Reference Read</p>
-      <li><a href="https://www.cloudflare.com/learning/network-layer/what-is-a-packet/" target="_blank" rel="noopener">What is a Packet? – Cloudflare</a></li>
     </section>
 
     <section class="card">
@@ -654,7 +979,7 @@
     <section class="card">
       <h2>The Journey Ends in the Cloud ☁️</h2>
       <p class="muted">The data you're reading travelled from a VS Code editor, across multiple networks, and reached you via this page hosted in the cloud.</p>
-      </section>
+    </section>
 
   </div>
 
@@ -685,6 +1010,19 @@
       panel.classList.remove('fade-in');
       void panel.offsetWidth;
       panel.classList.add('fade-in');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showSubtopic(name) {
+    document.querySelectorAll('.subtopic-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('stab-' + name);
+    if (btn) btn.classList.add('active');
+
+    document.querySelectorAll('.subtopic-panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById('spanel-' + name);
+    if (panel) {
+      panel.classList.add('active');
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
