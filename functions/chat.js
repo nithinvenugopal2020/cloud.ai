@@ -1,22 +1,22 @@
 /**
  * Cloudflare Pages Function — /chat
  * cloudnetworking.ai AI chat proxy with rate limiting
- *
- * Rate limit: 5 questions per IP per day (resets midnight UTC)
- * Uses Cloudflare KV for tracking — free tier is plenty.
+ * Routes via Cloudflare AI Gateway (avoids region restrictions)
  *
  * SETUP:
- * 1. Cloudflare Dashboard → Workers & Pages → KV
- *    → Create namespace → name it: CHAT_RATE_LIMIT
- * 2. Pages project → Settings → Bindings → Add KV binding:
- *    Variable name: CHAT_RATE_LIMIT
- *    KV namespace:  select the one you just created
- * 3. Secret already set:
- *    OPENAI_API_KEY
+ * 1. Cloudflare → AI Gateway → Create Gateway → name: openai-proxy
+ * 2. Copy your Account ID from the gateway URL
+ * 3. Replace YOUR_ACCOUNT_ID below with your actual Account ID
+ * 4. KV binding: CHAT_RATE_LIMIT (already set up)
+ * 5. Secret: OPENAI_API_KEY (already set)
  */
 
-const MODEL       = "gpt-4o-mini";   // cost-efficient, resets to gpt-4o anytime
+const MODEL       = "gpt-4o-mini";
 const DAILY_LIMIT = 5;
+const ACCOUNT_ID  = "2f60f2d3b1487567a2b0a7fcbab445cb";
+
+// AI Gateway URL — routes through Cloudflare US infrastructure
+const OPENAI_URL  = `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/openai-proxy/openai/chat/completions`;
 
 const SYSTEM_PROMPT = `You are the AI assistant for cloudnetworking.ai — an educational site focused on cloud networking and security.
 
@@ -43,10 +43,8 @@ export async function onRequestOptions() {
 
 export async function onRequestPost({ request, env }) {
 
-  // ── Get visitor IP (Cloudflare always sets this header) ──
-  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-
-  // ── Rate limit key: one per IP per calendar day (UTC) ──
+  // ── Rate limiting ──
+  const ip      = request.headers.get("CF-Connecting-IP") || "unknown";
   const today   = new Date().toISOString().slice(0, 10);
   const kvKey   = `rate:${ip}:${today}`;
   const current = parseInt(await env.CHAT_RATE_LIMIT.get(kvKey) || "0");
@@ -59,7 +57,6 @@ export async function onRequestPost({ request, env }) {
     }, 429);
   }
 
-  // ── Increment counter — expires after 25h to cover timezone edge cases ──
   await env.CHAT_RATE_LIMIT.put(kvKey, String(current + 1), { expirationTtl: 90000 });
   const remaining = DAILY_LIMIT - (current + 1);
 
@@ -71,23 +68,22 @@ export async function onRequestPost({ request, env }) {
   const { message, history } = body;
   if (!message) return respond({ error: "message required" }, 400);
 
-  // ── Build messages — keep last 6 messages (3 turns) to save tokens ──
+  // ── Build messages ──
   const messages = [
     { role: "system", content: SYSTEM_PROMPT },
     ...(Array.isArray(history) ? history.slice(-6) : []),
     { role: "user", content: message },
   ];
 
-  // ── Call OpenAI ──
-  // cf object forces Cloudflare to route this request via a US data center
-  // which avoids the "country not supported" error from OpenAI
+  // ── Call OpenAI via Cloudflare AI Gateway ──
   let res;
   try {
-    res = await fetch("https://api.openai.com/v1/chat/completions", {
+    res = await fetch(OPENAI_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
+        "cf-aig-authorization": `Bearer ${env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
         model: MODEL,
@@ -95,12 +91,6 @@ export async function onRequestPost({ request, env }) {
         max_tokens: 600,
         temperature: 0.7,
       }),
-      cf: {
-        resolveOverride: "api.openai.com",
-        cacheTtl: 0,
-        cacheEverything: false,
-        country: "US",        // route via US Cloudflare edge node
-      },
     });
   } catch (err) {
     return respond({ error: "Failed to reach OpenAI: " + err.message }, 502);
