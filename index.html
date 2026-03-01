@@ -819,53 +819,252 @@ Transit Gateway
 
     <section class="page-hero">
       <h1 style="color:#fff;margin:0 0 10px;font-size:34px;font-weight:900;">Cloud Security</h1>
-      <p class="muted" style="margin:0;">How modern networks protect applications from volumetric, protocol, and application-layer attacks.</p>
-      <div class="stat-row">
-        <div class="stat-box"><b>Tbps</b><span>Volumetric Attacks</span></div>
-        <div class="stat-box"><b>L3 / L4 / L7</b><span>Attack Layers</span></div>
-        <div class="stat-box"><b>24×7</b><span>Automated Mitigation</span></div>
-      </div>
+      <p class="muted" style="margin:0;">Traditional vs cloud security models, DDoS protection, and how AWS enforces identity-driven policy at every action.</p>
     </section>
 
-    <section class="card">
-      <h2>What is a DDoS Attack?</h2>
-      <p class="muted">A Distributed Denial of Service (DDoS) attack is an attempt to make an online service unavailable by overwhelming it with traffic from multiple sources.</p>
-    </section>
+    <div class="subtopic-nav">
+      <button class="subtopic-btn active" onclick="showSubtopic('dc-security')" id="stab-dc-security">🏛️ DC vs AWS Security</button>
+      <button class="subtopic-btn" onclick="showSubtopic('ddos')" id="stab-ddos">🛡️ Cloud DDoS</button>
+    </div>
 
-    <section class="card">
-      <h2>Testing &amp; Resilience Validation</h2>
-      <div class="two-col">
-        <div>
-          <h3>L3 / L4 Lab Tools</h3>
-          <p class="muted">Use only in environments you own or are authorised to test.</p>
-          <ul class="tool-list">
-            <li><span class="tool">hping3</span> Protocol behaviour testing</li>
-            <li><span class="tool">iperf3</span> Throughput baseline</li>
-            <li><span class="tool">tcpdump</span> Packet inspection</li>
-          </ul>
-          <div class="callout">Measure: SYN backlog, drops, conntrack usage, edge rate-limits.</div>
+    <!-- DC vs AWS SECURITY -->
+    <div class="subtopic-panel active" id="spanel-dc-security">
+
+      <section class="card" style="margin-top:24px;">
+        <h2>Traditional Data Center Security vs AWS Cloud Security</h2>
+        <p class="muted">As enterprises move critical workloads to the cloud, the real transformation is not just tooling — it is architectural and philosophical. Security shifts from protecting network boundaries to enforcing identity and policy at every action.</p>
+      </section>
+
+      <!-- Traditional Model -->
+      <section class="card">
+        <h2>The Traditional Data Center Security Model</h2>
+        <p class="muted">Traditional data center security is primarily <strong>network-centric and perimeter-driven</strong>. The foundational assumption is simple: if a user or system is inside the trusted network, it is generally trusted.</p>
+        <div class="diff-grid">
+          <div class="diff-card">
+            <h4>🔹 Security Controls</h4>
+            <ul>
+              <li>Edge firewalls — North-South traffic</li>
+              <li>Internal firewalls — East-West segmentation</li>
+              <li>VLAN isolation</li>
+              <li>VPN concentrators</li>
+              <li>Active Directory for identity</li>
+              <li>IDS/IPS appliances</li>
+            </ul>
+          </div>
+          <div class="diff-card">
+            <h4>⚠️ Inherent Risks</h4>
+            <ul>
+              <li>Lateral movement within trusted zones</li>
+              <li>Static credential compromise</li>
+              <li>Insider misuse</li>
+              <li>Limited API-level tracking</li>
+              <li>Broad internal trust after perimeter</li>
+            </ul>
+          </div>
         </div>
-        <div>
-          <h3>Layer 7 Load Testing</h3>
-          <p class="muted">Simulate real users and APIs to validate WAF, caching, and autoscaling.</p>
-          <ul class="tool-list">
-            <li><span class="tool">ab</span> Apache Benchmark — quick concurrency test</li>
-            <li><span class="tool">k6</span> Scripted HTTP tests</li>
-            <li><span class="tool">JMeter</span> API workflows</li>
-            <li><span class="tool">Locust</span> User behaviour simulation</li>
-            <li><span class="tool">Gatling</span> High-performance load</li>
-          </ul>
-          <div class="callout">Measure: p95 latency, error rate, WAF challenges, cache hit ratio, scale-up time.</div>
+        <div class="insight-box">
+          <p>Protection focuses heavily on <strong>securing the perimeter</strong>. Once traffic passes through the firewall, implicit trust increases significantly.</p>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="card">
-      <h2>The Goal of DDoS Protection</h2>
-      <p class="muted">The objective is not just to block traffic, but to ensure legitimate users always get through while attacks are absorbed at the network edge.</p>
-    </section>
+      <!-- AWS Model -->
+      <section class="card">
+        <h2>The AWS Cloud Security Model</h2>
+        <p class="muted">In AWS, security becomes <strong>identity-driven, API-controlled, and policy-enforced</strong>. Every action performed in AWS is an API call that must be authenticated, authorized, and logged.</p>
+        <div class="diff-grid">
+          <div class="diff-card">
+            <h4>🔷 Security Controls</h4>
+            <ul>
+              <li>IAM — identity &amp; access management</li>
+              <li>Security Groups — workload-level firewall</li>
+              <li>CloudTrail — every API action logged</li>
+              <li>Temporary credentials via STS</li>
+              <li>Service Control Policies (SCPs)</li>
+              <li>VPC isolation + private subnets</li>
+            </ul>
+          </div>
+          <div class="diff-card">
+            <h4>⚠️ Cloud-Specific Risks</h4>
+            <ul>
+              <li>Over-permissioned IAM roles</li>
+              <li>Publicly exposed storage or services</li>
+              <li>Security Group misconfigurations</li>
+              <li>Governance gaps across accounts</li>
+              <li>Configuration drift</li>
+            </ul>
+          </div>
+        </div>
+        <div class="insight-box">
+          <p>This is a <strong>Zero Trust approach</strong>: trust is not based on network location — trust is based on <strong>identity and explicit permission</strong>. Even inside a private VPC, access is denied unless IAM allows it.</p>
+        </div>
+      </section>
 
-  </div>
+      <!-- Real World Example -->
+      <section class="card">
+        <h2>Real-World Example: A Banking Application</h2>
+        <p class="muted">Three-tier app: Web servers → Application servers → Database servers.</p>
+
+        <h3>Traditional Deployment</h3>
+        <div class="arch-diagram">Internet → Edge Firewall → DMZ (Web Tier)
+       → Internal Firewall → App Tier
+       → Database Tier</div>
+        <ul style="margin-top:12px;">
+          <li>Firewall rules allowing specific ports between tiers</li>
+          <li>AD groups controlling server access</li>
+          <li>Service account passwords stored in config files</li>
+          <li>VLAN segmentation between environments</li>
+        </ul>
+        <div class="callout" style="margin-top:12px;">If an attacker compromises the app server: stored credentials may be reused, lateral movement within the VLAN is possible, and logs are spread across firewall, AD, and OS systems requiring manual correlation.</div>
+
+        <h3 style="margin-top:20px;">AWS Deployment</h3>
+        <div class="arch-diagram">Internet → ALB → Web EC2
+      → App EC2
+      → RDS Database</div>
+        <ul style="margin-top:12px;">
+          <li>Security Groups restricting traffic at instance level</li>
+          <li>IAM roles attached to EC2 — no stored passwords</li>
+          <li>Temporary credentials via STS (auto-rotate)</li>
+          <li>CloudTrail logging every API action</li>
+          <li>SCPs for multi-account governance</li>
+        </ul>
+
+        <div class="flow-steps" style="margin-top:20px;">
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">1</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content"><h4>Engineer attempts to terminate production EC2</h4><p>An API request is generated and sent to AWS.</p></div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">2</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content"><h4>IAM evaluates permissions</h4><p>Does this identity have <code>ec2:TerminateInstances</code> on this resource?</p></div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">3</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content"><h4>SCPs evaluated</h4><p>Organization-level Service Control Policies are checked if configured.</p></div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-dot">4</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-content"><h4>Action denied — and logged</h4><p>If permission is denied, the action fails. The attempt is recorded in <strong>CloudTrail</strong> regardless.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Service Account Security -->
+      <section class="card">
+        <h2>Service Account Security</h2>
+        <table class="mapping-table">
+          <thead><tr><th>Aspect</th><th>Traditional DC</th><th>AWS</th></tr></thead>
+          <tbody>
+            <tr><td>Credential type</td><td>Static passwords</td><td>Temporary STS tokens</td></tr>
+            <tr><td>Rotation</td><td>Manual — often infrequent</td><td>Automatic</td></tr>
+            <tr><td>Storage</td><td>Config files, scripts</td><td>Not stored — assumed via IAM role</td></tr>
+            <tr><td>Reuse risk</td><td>High — same creds across systems</td><td>Low — scoped, time-limited tokens</td></tr>
+            <tr><td>Compromise window</td><td>Until manually rotated</td><td>Minutes (token expiry)</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- East-West + Visibility -->
+      <section class="card">
+        <h2>East-West Control &amp; Audit Visibility</h2>
+        <div class="diff-grid">
+          <div class="diff-card">
+            <h4>🔹 Traditional East-West</h4>
+            <ul>
+              <li>Internal firewalls and VLAN rules</li>
+              <li>Broad policies to reduce ops complexity</li>
+              <li>Logs spread across firewall, AD, OS</li>
+              <li>Manual correlation during investigations</li>
+            </ul>
+          </div>
+          <div class="diff-card">
+            <h4>🔷 AWS East-West</h4>
+            <ul>
+              <li>Security Groups attached per workload</li>
+              <li>Explicit, stateful rules only</li>
+              <li>App server → DB on port 3306 only</li>
+              <li>CloudTrail centralises all API activity</li>
+            </ul>
+          </div>
+        </div>
+        <div class="insight-box" style="margin-top:14px;">
+          <p>CloudTrail records: <strong>who</strong> performed the action, <strong>what</strong> action, <strong>which</strong> resource, <strong>when</strong>, and <strong>from where</strong> — providing strong forensic capability by default.</p>
+        </div>
+      </section>
+
+      <!-- Fundamental Shift -->
+      <section class="card">
+        <h2>The Fundamental Security Shift</h2>
+        <table class="mapping-table">
+          <thead><tr><th>Dimension</th><th>Traditional DC</th><th>AWS Cloud</th></tr></thead>
+          <tbody>
+            <tr><td>Primary control</td><td>Network perimeter firewall</td><td>IAM — identity &amp; policy</td></tr>
+            <tr><td>Trust model</td><td>Trust based on network location</td><td>Zero Trust — explicit permission required</td></tr>
+            <tr><td>Segmentation</td><td>VLAN-based, broad zones</td><td>Workload-level Security Groups</td></tr>
+            <tr><td>Credentials</td><td>Static, long-lived</td><td>Temporary, auto-rotating</td></tr>
+            <tr><td>Audit</td><td>Distributed, manual correlation</td><td>Centralised API-level logging</td></tr>
+            <tr><td>Enforcement</td><td>Hardware-enforced trust zones</td><td>Software-defined policy governance</td></tr>
+          </tbody>
+        </table>
+        <div class="insight-box" style="margin-top:16px;">
+          <p>Cloud does not eliminate risk — it <strong>shifts risk from infrastructure weakness to configuration discipline</strong>. The shift is from <strong>"Protect the network"</strong> to <strong>"Control identity, policy, and every action."</strong></p>
+        </div>
+      </section>
+
+    </div><!-- end spanel-dc-security -->
+
+    <!-- DDOS -->
+    <div class="subtopic-panel" id="spanel-ddos">
+
+      <section class="page-hero" style="margin-top:24px; background:linear-gradient(135deg,rgba(255,255,255,.05),transparent);">
+        <p class="muted" style="margin:0;">How modern networks protect applications from volumetric, protocol, and application-layer attacks.</p>
+        <div class="stat-row">
+          <div class="stat-box"><b>Tbps</b><span>Volumetric Attacks</span></div>
+          <div class="stat-box"><b>L3 / L4 / L7</b><span>Attack Layers</span></div>
+          <div class="stat-box"><b>24×7</b><span>Automated Mitigation</span></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>What is a DDoS Attack?</h2>
+        <p class="muted">A Distributed Denial of Service (DDoS) attack is an attempt to make an online service unavailable by overwhelming it with traffic from multiple sources.</p>
+      </section>
+
+      <section class="card">
+        <h2>Testing &amp; Resilience Validation</h2>
+        <div class="two-col">
+          <div>
+            <h3>L3 / L4 Lab Tools</h3>
+            <p class="muted">Use only in environments you own or are authorised to test.</p>
+            <ul class="tool-list">
+              <li><span class="tool">hping3</span> Protocol behaviour testing</li>
+              <li><span class="tool">iperf3</span> Throughput baseline</li>
+              <li><span class="tool">tcpdump</span> Packet inspection</li>
+            </ul>
+            <div class="callout">Measure: SYN backlog, drops, conntrack usage, edge rate-limits.</div>
+          </div>
+          <div>
+            <h3>Layer 7 Load Testing</h3>
+            <p class="muted">Simulate real users and APIs to validate WAF, caching, and autoscaling.</p>
+            <ul class="tool-list">
+              <li><span class="tool">ab</span> Apache Benchmark — quick concurrency test</li>
+              <li><span class="tool">k6</span> Scripted HTTP tests</li>
+              <li><span class="tool">JMeter</span> API workflows</li>
+              <li><span class="tool">Locust</span> User behaviour simulation</li>
+              <li><span class="tool">Gatling</span> High-performance load</li>
+            </ul>
+            <div class="callout">Measure: p95 latency, error rate, WAF challenges, cache hit ratio, scale-up time.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>The Goal of DDoS Protection</h2>
+        <p class="muted">The objective is not just to block traffic, but to ensure legitimate users always get through while attacks are absorbed at the network edge.</p>
+      </section>
+
+    </div><!-- end spanel-ddos -->
+
+  </div><!-- end panel-security -->
 
   <!-- ═══ BLOG ═══ -->
   <div class="tab-panel" id="panel-blog">
@@ -1015,15 +1214,18 @@ Transit Gateway
   }
 
   function showSubtopic(name) {
-    document.querySelectorAll('.subtopic-btn').forEach(b => b.classList.remove('active'));
+    // Find the button and its parent tab panel
     const btn = document.getElementById('stab-' + name);
-    if (btn) btn.classList.add('active');
-
-    document.querySelectorAll('.subtopic-panel').forEach(p => p.classList.remove('active'));
     const panel = document.getElementById('spanel-' + name);
-    if (panel) {
-      panel.classList.add('active');
-    }
+    if (!btn || !panel) return;
+
+    // Only toggle siblings within the same parent tab panel
+    const parentTab = panel.closest('.tab-panel');
+    parentTab.querySelectorAll('.subtopic-btn').forEach(b => b.classList.remove('active'));
+    parentTab.querySelectorAll('.subtopic-panel').forEach(p => p.classList.remove('active'));
+
+    btn.classList.add('active');
+    panel.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
