@@ -1353,10 +1353,10 @@ Transit Gateway
   // ── Pages Function endpoint ──
   const WORKER_URL = '/chat';
 
-  let chatHistory = [];
+  let previousResponseId = null;  // OpenAI keeps context server-side via response ID
   let isOpen    = false;
   let isLoading = false;
-  let remaining = 5; // shown in header, updated from server
+  let remaining = 5;
 
   function toggleChat() {
     isOpen = !isOpen;
@@ -1372,7 +1372,6 @@ Transit Gateway
     remaining = n;
     const el = document.getElementById('chat-counter');
     if (el) el.textContent = `${n} of 5 left today`;
-    // disable input if limit hit
     if (n <= 0) {
       document.getElementById('chat-input').disabled = true;
       document.getElementById('chat-send').disabled  = true;
@@ -1397,7 +1396,8 @@ Transit Gateway
       const res = await fetch(WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, history: chatHistory })
+        // Send message + previousResponseId so OpenAI maintains conversation context
+        body: JSON.stringify({ message: text, previousResponseId })
       });
 
       const data = await res.json();
@@ -1409,8 +1409,8 @@ Transit Gateway
       } else if (!res.ok || data.error) {
         appendError(data.error || 'Something went wrong. Please try again.');
       } else {
-        chatHistory.push({ role: 'user',      content: text });
-        chatHistory.push({ role: 'assistant', content: data.reply });
+        // Save response ID for next turn — OpenAI stores the history server-side
+        previousResponseId = data.responseId;
         appendMsg('assistant', data.reply);
         if (typeof data.remaining === 'number') updateCounter(data.remaining);
       }
