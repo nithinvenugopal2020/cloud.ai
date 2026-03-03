@@ -11,7 +11,7 @@ const DAILY_LIMIT = 5;
 const ACCOUNT_ID  = "2f60f2d3b1487567a2b0a7fcbab445cb";
 
 // Using /chat/completions — most compatible with AI Gateway compat layer
-const OPENAI_URL = `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/openai-proxy/compat/chat/completions`;
+const OPENAI_URL = `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/openai-proxy/openai/chat/completions`;
 
 const SYSTEM_PROMPT = `You are the AI assistant for cloudnetworking.ai — an educational site focused on cloud networking and security.
 
@@ -98,7 +98,7 @@ export async function onRequestPost({ request, env }) {
   catch { return respond({ error: "Invalid response from OpenAI: " + rawText.slice(0, 200) }, 500); }
 
   if (!res.ok) {
-    const errMsg = data?.error?.message || data?.error?.code || rawText.slice(0, 300);
+    const errMsg = data?.error?.message || data?.error?.type || data?.error?.code || ("HTTP " + res.status + ": " + rawText.slice(0, 300));
     return respond({ error: errMsg }, res.status);
   }
 
