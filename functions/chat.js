@@ -10,7 +10,7 @@ const MODEL       = "gpt-4o-mini";
 const DAILY_LIMIT = 5;
 const ACCOUNT_ID  = "2f60f2d3b1487567a2b0a7fcbab445cb";
 
-// Using /chat/completions — most compatible with AI Gateway compat layer
+// AI Gateway OpenAI provider — model goes in the URL path
 const OPENAI_URL = `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/openai-proxy/openai/chat/completions`;
 
 const SYSTEM_PROMPT = `You are the AI assistant for cloudnetworking.ai — an educational site focused on cloud networking and security.
@@ -71,6 +71,7 @@ export async function onRequestPost({ request, env }) {
   ];
 
   // Call OpenAI via Cloudflare AI Gateway
+  // AI Gateway expects a standard OpenAI-compatible body
   let res;
   try {
     res = await fetch(OPENAI_URL, {
@@ -78,12 +79,14 @@ export async function onRequestPost({ request, env }) {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
+        "cf-aig-authorization": `Bearer ${env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
         model: MODEL,
-        messages,
+        messages: messages,
         max_tokens: 600,
         temperature: 0.7,
+        stream: false,
       }),
     });
   } catch (err) {
