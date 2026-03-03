@@ -1353,7 +1353,7 @@ Transit Gateway
   // ── Pages Function endpoint ──
   const WORKER_URL = '/chat';
 
-  let previousResponseId = null;  // OpenAI keeps context server-side via response ID
+  let chatHistory = [];
   let isOpen    = false;
   let isLoading = false;
   let remaining = 5;
@@ -1397,7 +1397,7 @@ Transit Gateway
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         // Send message + previousResponseId so OpenAI maintains conversation context
-        body: JSON.stringify({ message: text, previousResponseId })
+        body: JSON.stringify({ message: text, history: chatHistory })
       });
 
       const data = await res.json();
@@ -1409,8 +1409,8 @@ Transit Gateway
       } else if (!res.ok || data.error) {
         appendError(data.error || 'Something went wrong. Please try again.');
       } else {
-        // Save response ID for next turn — OpenAI stores the history server-side
-        previousResponseId = data.responseId;
+        chatHistory.push({ role: 'user',      content: text });
+        chatHistory.push({ role: 'assistant', content: data.reply });
         appendMsg('assistant', data.reply);
         if (typeof data.remaining === 'number') updateCounter(data.remaining);
       }
