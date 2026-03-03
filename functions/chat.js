@@ -1,26 +1,29 @@
 /**
  * Cloudflare Pages Function — /chat
- * cloudnetworking.ai — OpenAI Responses API with Vector Store search
+ * cloudnetworking.ai — chat completions via AI Gateway
  *
- * No Assistant needed — uses Responses API directly with file_search.
- * Routes via Cloudflare AI Gateway to avoid region restrictions.
- *
- * Secrets in Cloudflare Pages → Settings → Variables and Secrets:
- *   OPENAI_API_KEY
- *   OPENAI_VECTOR_STORE_ID
- * Binding:
- *   CHAT_RATE_LIMIT  (KV namespace)
+ * Secrets:  OPENAI_API_KEY, OPENAI_VECTOR_STORE_ID
+ * Binding:  CHAT_RATE_LIMIT (KV)
  */
 
 const MODEL       = "gpt-4o-mini";
 const DAILY_LIMIT = 5;
 const ACCOUNT_ID  = "2f60f2d3b1487567a2b0a7fcbab445cb";
-const GATEWAY_URL = `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/openai-proxy/compat`;
-const OPENAI_URL  = `${GATEWAY_URL}/responses`;
+
+// Using /chat/completions — most compatible with AI Gateway compat layer
+const OPENAI_URL = `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/openai-proxy/compat/chat/completions`;
 
 const SYSTEM_PROMPT = `You are the AI assistant for cloudnetworking.ai — an educational site focused on cloud networking and security.
-Search the knowledge base first before answering. Be concise, clear, and beginner-friendly.
-If the answer is not in the knowledge base, say so honestly and give a general best-practice answer.`;
+
+Your knowledge covers:
+- AWS networking: VPC, Transit Gateway, Direct Connect, BGP, route tables, attachments, VRFs
+- Firewall concepts: flow, connection, session, stateful vs stateless, 5-tuple
+- Cloud security: IAM, Zero Trust, DDoS protection, Security Groups, CloudTrail
+- Traditional DC vs cloud security: perimeter vs identity-driven security
+- Networking fundamentals: OSI model, TCP/IP, routing, DNS, packets
+
+Be concise, clear, and beginner-friendly. Explain technical terms when you use them.
+If you do not know something, say so honestly.`;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -57,21 +60,15 @@ export async function onRequestPost({ request, env }) {
   try { body = await request.json(); }
   catch { return respond({ error: "Invalid JSON" }, 400); }
 
-  const { message, previousResponseId } = body;
+  const { message, history } = body;
   if (!message) return respond({ error: "message required" }, 400);
 
-  // Build Responses API payload
-  // previousResponseId keeps conversation context across turns — no history array needed
-  const payload = {
-    model: MODEL,
-    instructions: SYSTEM_PROMPT,
-    input: message,
-    tools: [{
-      type: "file_search",
-      vector_store_ids: [env.OPENAI_VECTOR_STORE_ID],
-    }],
-    ...(previousResponseId && { previous_response_id: previousResponseId }),
-  };
+  // Build messages — keep last 6 messages (3 turns) to save tokens
+  const messages = [
+    { role: "system", content: SYSTEM_PROMPT },
+    ...(Array.isArray(history) ? history.slice(-6) : []),
+    { role: "user", content: message },
+  ];
 
   // Call OpenAI via Cloudflare AI Gateway
   let res;
@@ -82,36 +79,31 @@ export async function onRequestPost({ request, env }) {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        model: MODEL,
+        messages,
+        max_tokens: 600,
+        temperature: 0.7,
+      }),
     });
   } catch (err) {
-    return respond({ error: "Failed to reach OpenAI: " + err.message }, 502);
+    return respond({ error: "Connection failed: " + err.message }, 502);
   }
 
-  const data = await res.json();
+  // Log the raw status for debugging
+  const rawText = await res.text();
+
+  let data;
+  try { data = JSON.parse(rawText); }
+  catch { return respond({ error: "Invalid response from OpenAI: " + rawText.slice(0, 200) }, 500); }
 
   if (!res.ok) {
-    return respond({ error: data?.error?.message || "OpenAI error" }, res.status);
+    const errMsg = data?.error?.message || data?.error?.code || rawText.slice(0, 300);
+    return respond({ error: errMsg }, res.status);
   }
 
-  // Extract reply from Responses API output blocks
-  const output = data?.output ?? [];
-  let reply = "";
-  for (const block of output) {
-    if (block.type === "message") {
-      for (const part of block.content ?? []) {
-        if (part.type === "output_text") {
-          reply += part.text;
-        }
-      }
-    }
-  }
-
-  // Strip citation markers e.g. 【4:0source】
-  reply = reply.replace(/[【][^】]*[】]/g, "").trim();
-  if (!reply) reply = "Sorry, I could not find an answer. Please try rephrasing.";
-
-  return respond({ reply, remaining, responseId: data.id }, 200);
+  const reply = data?.choices?.[0]?.message?.content ?? "Sorry, no response generated.";
+  return respond({ reply, remaining }, 200);
 }
 
 function respond(data, status) {
