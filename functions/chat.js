@@ -1,17 +1,18 @@
 /**
  * Cloudflare Pages Function — /chat
- * cloudnetworking.ai — chat completions via AI Gateway
+ * cloudnetworking.ai
  *
- * Secrets:  OPENAI_API_KEY, OPENAI_VECTOR_STORE_ID
+ * Calls OpenAI directly (no AI Gateway).
+ * Region issue is handled by setting smart_placement in wrangler or
+ * Cloudflare automatically routing to nearest OpenAI-supported region.
+ *
+ * Secrets:  OPENAI_API_KEY
  * Binding:  CHAT_RATE_LIMIT (KV)
  */
 
 const MODEL       = "gpt-4o-mini";
 const DAILY_LIMIT = 5;
-const ACCOUNT_ID  = "2f60f2d3b1487567a2b0a7fcbab445cb";
-
-// AI Gateway OpenAI provider — model goes in the URL path
-const OPENAI_URL = `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/openai-proxy/openai/chat/completions`;
+const OPENAI_URL  = "https://api.openai.com/v1/chat/completions";
 
 const SYSTEM_PROMPT = `You are the AI assistant for cloudnetworking.ai — an educational site focused on cloud networking and security.
 
@@ -63,15 +64,13 @@ export async function onRequestPost({ request, env }) {
   const { message, history } = body;
   if (!message) return respond({ error: "message required" }, 400);
 
-  // Build messages — keep last 6 messages (3 turns) to save tokens
   const messages = [
     { role: "system", content: SYSTEM_PROMPT },
     ...(Array.isArray(history) ? history.slice(-6) : []),
     { role: "user", content: message },
   ];
 
-  // Call OpenAI via Cloudflare AI Gateway
-  // AI Gateway expects a standard OpenAI-compatible body
+  // Call OpenAI directly
   let res;
   try {
     res = await fetch(OPENAI_URL, {
@@ -79,29 +78,25 @@ export async function onRequestPost({ request, env }) {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
-        "cf-aig-authorization": `Bearer ${env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
         model: MODEL,
         messages: messages,
         max_tokens: 600,
         temperature: 0.7,
-        stream: false,
       }),
     });
   } catch (err) {
     return respond({ error: "Connection failed: " + err.message }, 502);
   }
 
-  // Log the raw status for debugging
   const rawText = await res.text();
-
   let data;
   try { data = JSON.parse(rawText); }
-  catch { return respond({ error: "Invalid response from OpenAI: " + rawText.slice(0, 200) }, 500); }
+  catch { return respond({ error: "Bad response: " + rawText.slice(0, 200) }, 500); }
 
   if (!res.ok) {
-    const errMsg = data?.error?.message || data?.error?.type || data?.error?.code || ("HTTP " + res.status + ": " + rawText.slice(0, 300));
+    const errMsg = data?.error?.message || data?.error?.code || ("HTTP " + res.status + ": " + rawText.slice(0, 200));
     return respond({ error: errMsg }, res.status);
   }
 
