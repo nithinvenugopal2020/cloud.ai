@@ -1,34 +1,26 @@
 /**
  * Cloudflare Pages Function — /chat
- * cloudnetworking.ai AI chat proxy with rate limiting
- * Routes via Cloudflare AI Gateway (avoids region restrictions)
+ * cloudnetworking.ai — OpenAI Responses API with Vector Store search
  *
- * SETUP:
- * 1. Cloudflare → AI Gateway → Create Gateway → name: openai-proxy
- * 2. Copy your Account ID from the gateway URL
- * 3. Replace YOUR_ACCOUNT_ID below with your actual Account ID
- * 4. KV binding: CHAT_RATE_LIMIT (already set up)
- * 5. Secret: OPENAI_API_KEY (already set)
+ * No Assistant needed — uses Responses API directly with file_search.
+ * Routes via Cloudflare AI Gateway to avoid region restrictions.
+ *
+ * Secrets in Cloudflare Pages → Settings → Variables and Secrets:
+ *   OPENAI_API_KEY
+ *   OPENAI_VECTOR_STORE_ID
+ * Binding:
+ *   CHAT_RATE_LIMIT  (KV namespace)
  */
 
 const MODEL       = "gpt-4o-mini";
 const DAILY_LIMIT = 5;
 const ACCOUNT_ID  = "2f60f2d3b1487567a2b0a7fcbab445cb";
-
-// AI Gateway URL — exact URL from your Cloudflare AI Gateway
-const OPENAI_URL  = `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/openai-proxy/compat/chat/completions`;
+const GATEWAY_URL = `https://gateway.ai.cloudflare.com/v1/${ACCOUNT_ID}/openai-proxy/compat`;
+const OPENAI_URL  = `${GATEWAY_URL}/responses`;
 
 const SYSTEM_PROMPT = `You are the AI assistant for cloudnetworking.ai — an educational site focused on cloud networking and security.
-
-Your knowledge covers:
-- AWS networking: VPC, Transit Gateway, Direct Connect, BGP, route tables
-- Firewall concepts: flow, connection, session, stateful vs stateless
-- Cloud security: IAM, Zero Trust, DDoS protection, Security Groups
-- Networking fundamentals: OSI model, TCP/IP, routing, DNS, packets
-- Traditional DC vs cloud security models
-
-Be concise, clear, and beginner-friendly. Explain technical terms when you use them.
-If you do not know something, say so honestly.`;
+Search the knowledge base first before answering. Be concise, clear, and beginner-friendly.
+If the answer is not in the knowledge base, say so honestly and give a general best-practice answer.`;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -43,7 +35,7 @@ export async function onRequestOptions() {
 
 export async function onRequestPost({ request, env }) {
 
-  // ── Rate limiting ──
+  // Rate limiting
   const ip      = request.headers.get("CF-Connecting-IP") || "unknown";
   const today   = new Date().toISOString().slice(0, 10);
   const kvKey   = `rate:${ip}:${today}`;
@@ -60,22 +52,28 @@ export async function onRequestPost({ request, env }) {
   await env.CHAT_RATE_LIMIT.put(kvKey, String(current + 1), { expirationTtl: 90000 });
   const remaining = DAILY_LIMIT - (current + 1);
 
-  // ── Parse body ──
+  // Parse body
   let body;
   try { body = await request.json(); }
   catch { return respond({ error: "Invalid JSON" }, 400); }
 
-  const { message, history } = body;
+  const { message, previousResponseId } = body;
   if (!message) return respond({ error: "message required" }, 400);
 
-  // ── Build messages ──
-  const messages = [
-    { role: "system", content: SYSTEM_PROMPT },
-    ...(Array.isArray(history) ? history.slice(-6) : []),
-    { role: "user", content: message },
-  ];
+  // Build Responses API payload
+  // previousResponseId keeps conversation context across turns — no history array needed
+  const payload = {
+    model: MODEL,
+    instructions: SYSTEM_PROMPT,
+    input: message,
+    tools: [{
+      type: "file_search",
+      vector_store_ids: [env.OPENAI_VECTOR_STORE_ID],
+    }],
+    ...(previousResponseId && { previous_response_id: previousResponseId }),
+  };
 
-  // ── Call OpenAI via Cloudflare AI Gateway ──
+  // Call OpenAI via Cloudflare AI Gateway
   let res;
   try {
     res = await fetch(OPENAI_URL, {
@@ -83,14 +81,8 @@ export async function onRequestPost({ request, env }) {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
-        "cf-aig-authorization": `Bearer ${env.OPENAI_API_KEY}`,
       },
-      body: JSON.stringify({
-        model: MODEL,
-        messages,
-        max_tokens: 600,
-        temperature: 0.7,
-      }),
+      body: JSON.stringify(payload),
     });
   } catch (err) {
     return respond({ error: "Failed to reach OpenAI: " + err.message }, 502);
@@ -102,8 +94,24 @@ export async function onRequestPost({ request, env }) {
     return respond({ error: data?.error?.message || "OpenAI error" }, res.status);
   }
 
-  const reply = data?.choices?.[0]?.message?.content ?? "Sorry, no response generated.";
-  return respond({ reply, remaining }, 200);
+  // Extract reply from Responses API output blocks
+  const output = data?.output ?? [];
+  let reply = "";
+  for (const block of output) {
+    if (block.type === "message") {
+      for (const part of block.content ?? []) {
+        if (part.type === "output_text") {
+          reply += part.text;
+        }
+      }
+    }
+  }
+
+  // Strip citation markers e.g. 【4:0source】
+  reply = reply.replace(/[【][^】]*[】]/g, "").trim();
+  if (!reply) reply = "Sorry, I could not find an answer. Please try rephrasing.";
+
+  return respond({ reply, remaining, responseId: data.id }, 200);
 }
 
 function respond(data, status) {
